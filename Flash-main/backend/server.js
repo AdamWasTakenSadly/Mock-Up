@@ -8,17 +8,13 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 const multer = require("multer");
 const path = require("path");
-const administratorsRoutes = require ('./routes/administrators')
-const corporateTraineesRoutes = require ('./routes/corporateTrainees')
-const coursesRoutes = require ('./routes/courses')
-const examsRoutes = require ('./routes/exams')
-const subtitlesRoutes = require ('./routes/subtitles')
-const individualTraineesRoutes = require ('./routes/individualTrainees')
-const instructorsRoutes = require ('./routes/instructors')
-const reportsRoutes = require ('./routes/reports')
-const loginRoutes = require ('./routes/login')
-const userRoutes = require ('./routes/user')
-const corporateRoutes = require ('./routes/corporates')
+const productsRoutes = require ('./routes/products')
+const usersRoutes = require ('./routes/users')
+const guestRoutes = require ('./routes/guest')
+
+//functions for login routes
+const {login,signUp,logOut,getCurrentUserId} = require('./controllers/loginController')
+
 
 //express app
 const app = express()
@@ -29,7 +25,6 @@ app.use(cookieParser());
 app.use(session({secret: "Shh, its a secret!"}));
 app.use(express.urlencoded({extended:false}))
 app.use(cors())
-app.use("/lectures", express.static(path.join(__dirname, "/lectures")));
 
 
 app.use((req,res,next)=>{
@@ -37,32 +32,13 @@ app.use((req,res,next)=>{
     next()
 })
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, "lectures");
-    },
-    filename: (req, file, cb) => {
-      cb(null, req.body.name);
-    },
-});
-
-const upload = multer({ storage: storage });
-app.post("/upload", upload.single("file"), (req, res) => {
-    res.status(200).json("File has been uploaded");
-});
 
 //routes
-app.use('/administrators',administratorsRoutes)
-app.use('/corporateTrainees',corporateTraineesRoutes)
-app.use('/courses',coursesRoutes)
-app.use('/exams',examsRoutes)
-app.use('/subtitles',subtitlesRoutes)
-app.use('/individualTrainees',individualTraineesRoutes)
-app.use('/instructors',instructorsRoutes)
-app.use('/reports',reportsRoutes)
-app.use('/login',loginRoutes)
-app.use('/user',userRoutes)
-app.use('/corporates',corporateRoutes)
+app.use('/products',productsRoutes)
+app.use('/users',usersRoutes)
+app.use('/guest',guestRoutes)
+
+
 
 //connect to db and accessing same one everytime
 mongoose.connect(process.env.MONGO_URI)
@@ -77,7 +53,8 @@ mongoose.connect(process.env.MONGO_URI)
         console.log(error)
     })
 
-    app.get('/', function(req, res){  //home page just testing sessions and telling user visited how many times
+//homepage routes
+app.get('/', function(req, res){  //home page just testing sessions and telling user visited how many times
         if(req.session.page_views){
            req.session.page_views++;
            res.send("You visited this page " + req.session.page_views + " times");
@@ -86,6 +63,15 @@ mongoose.connect(process.env.MONGO_URI)
            res.send("Welcome to this page for the first time!");
         }
      });
+
+//login routes
+app.post('/login', login)
+
+app.post('/signup',signUp)
+
+app.get('/logout',logOut)
+
+app.get('/currentUserId',requireAuth,getCurrentUserId)
 
      
 //npm install express

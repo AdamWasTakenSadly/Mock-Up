@@ -19,7 +19,7 @@ const userSchema = mongoose.Schema({
    
     "cart":[{
             type: mongoose.Types.ObjectId,
-             ref:'coursesModel'
+             ref:'ProductsModel'
     }],
 
 

@@ -13,7 +13,6 @@ const requireAuth = (req, res, next) => {
         req.user={}
         req.user.id=decodedToken.id
         req.user.username=decodedToken.username
-        req.user.type=decodedToken.type
         //console.log(decodedToken);
         next();
       }
