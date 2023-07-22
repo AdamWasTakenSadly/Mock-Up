@@ -12,7 +12,7 @@ const CourseReviews=()=>{
 
    useEffect(()=>{
         const fetchReviews = async ()=>{
-            const response = await fetch ('/courses/'+id+'/reviews')
+            //const response = await fetch ('/courses/'+id+'/reviews')
             const json = await response.json()
     
             console.log(json)

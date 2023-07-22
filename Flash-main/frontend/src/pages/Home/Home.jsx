@@ -1,8 +1,8 @@
 import {Link} from 'react-router-dom'
 import { useState,useEffect } from "react";
 import './Home.scss'
-import CourseDetailsGuest from "../../components/CourseDetailsGuest/CourseDetailsGuest"
-import {
+//import CourseDetailsGuest from "../../components/CourseDetailsGuest/CourseDetailsGuest"
+/*import {
   MDBTabs,
   MDBTabsItem,
   MDBTabsLink,
@@ -10,28 +10,11 @@ import {
   MDBTabsPane,
   MDBRow,
   MDBCol
-} from 'mdb-react-ui-kit';
+} from 'mdb-react-ui-kit';*/
 var bg = require("./bg.jpeg")
 
 const Home =() => {
 
-    const [courses , setCourses] = useState(null)
-    
-    useEffect(()=>{
-        const fetchCourses = async ()=>{
-            const response = await fetch ('/courses/popularCoursesGuest')
-            const json = await response.json()
-
-            console.log(json)
-
-            if (response.ok)
-            {
-                setCourses(json)
-            }
-          }
-
-        fetchCourses()
-    },[])
 
     return (
         <>
@@ -49,16 +32,8 @@ const Home =() => {
       <div>
 
          <div className="view-course" style={{textAlign:"center",marginTop:"120px", backgroundImage: "url("+bg+")",backgroundRepeat:"no-repeat",backgroundSize:"1400px" }} >
-         <h1  style={{textAlign:"center",marginLeft:"240px",color:"#d8e2fb",marginTop:"70px"}} > <b>Our most popular courses.</b></h1>
+         <h1  style={{textAlign:"center",marginLeft:"240px",color:"#d8e2fb",marginTop:"70px"}} > <b>Home.</b></h1>
 
-         <div className="topbar" >
-           {courses && courses.map(course => (
-                <MDBCol size='4'  >
-             <CourseDetailsGuest key={course._id}  course={course}></CourseDetailsGuest>
-             </MDBCol>
-             
-           ))}
-         </div>
        </div>
        </div>
        </body>

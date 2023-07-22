@@ -23,14 +23,9 @@ const Login =()=>{
     const [password,setPassword]=useState("")
     const [newPassword,setNewPassword]=useState("")
     const [error,setError] = useState (null)
-    const [contract, setContract]=useState(null)
-    const [contractState,setContractState]=useState(null) //is contract accepted (by instructor)
-    const [isOpen,setIsOpen]=useState(false) //is overlay open (for instructor)
-    const [isOpenCTrainee,setIsOpenCTrainee]=useState(false) //is overlay open (for ctrainee)
+    
     const [data,setData]=useState(null) 
-    const [agree,setAgree]=useState(false) //is the policy agreed to (by instructor)
-    const [firstLogin,setFirstLogin]=useState(null) //is this the first login for a cTrainee
-    const [firstLoginError,setFirstLoginError]=useState(null)
+    
 
     const { getCollapseProps, getToggleProps, isExpanded } = useCollapse();
 
@@ -89,137 +84,6 @@ const Login =()=>{
         }
     } 
 
-    useEffect(()=>{
-      const checkFirstLogin=async()=>{
-
-      if(data.type==="instructor")
-      {
-        const response = await fetch ('/instructors/getInstructor')
-        const json = await response.json()
-        if (response.ok){
-                setContractState(json.acceptedContract)
-                setContract(json.contract)
-        }
-      }
-      else if(data.type==="corporateTrainee")
-      {
-        const response = await fetch ('/corporateTrainees/getCorporateTrainee')
-        const json = await response.json()
-        if (response.ok){
-                setFirstLogin(json.isFirstLogin)
-        }
-      }
-      else
-      {
-        window.location.href="/"+data.type+"/"+data.id 
-      }
-    }
-    if(data)
-      {
-        checkFirstLogin()
-      }
-
-    
-  },[data])
-
-  useEffect(()=>{
-    if(contractState!=null)
-    {
-      //console.log(contractState)
-      if(contractState==false)
-        {
-          setIsOpen(true)
-        }
-        else{
-          window.location.href="/"+data.type+"/"+data.id 
-        }
-    }
-
-  },[contractState])
-
-  useEffect(()=>{
-    if(firstLogin!=null)
-    {
-      if(firstLogin==true)
-        {
-          setIsOpenCTrainee(true)
-        }
-        else{
-          window.location.href="/"+data.type+"/"+data.id 
-        }
-    }
-
-  },[firstLogin])
-
-
-    const handleAccept=async()=>{
-
-      if(!agree )
-      {
-        setFirstLoginError("Plaese accept your contract and our payment policy")
-      }
-      else if (newPassword==="")
-      {
-        setFirstLoginError("Please enter a new password")
-      }
-      else
-      {
-      const cond = {"acceptedContract": true}
-      const response = await fetch('/instructors/updateContract', {
-          method: 'PATCH',
-          body: JSON.stringify(cond),
-          headers: {
-              'Content-Type': 'application/json'
-          }
-      })
-      const json = await response.json()
-
-      const response2 = await fetch('/user/reset-password/'+data.id, {
-        method: 'PATCH',
-        body: JSON.stringify({password:newPassword}),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-
-      if (response.ok && response2.ok) {
-          //console.log(response)
-          window.location.href="/"+data.type+"/"+data.id 
-      }
-    }
-    }
-
-    const handleAcceptCTrainee=async()=>{
-      if(newPassword==="")
-      {
-        setFirstLoginError("Plaese enter a new password")
-      }
-      else{
-      const response = await fetch('/corporateTrainees/firstLoginDone', {
-        headers : { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-         }
-         
-      }
-      )
-      const json = await response.json()
-
-      const response2 = await fetch('/user/reset-password/'+data.id, {
-        method: 'PATCH',
-        body: JSON.stringify({password:newPassword}),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-
-      if (response.ok && response2.ok) {
-          //console.log(response)
-          window.location.href="/"+data.type+"/"+data.id 
-      }
-    }
-  
-    }
 
     const checkboxHandler = () => {
       setFirstLoginError(null)
@@ -266,43 +130,6 @@ const Login =()=>{
           </MDBRow>
     
         </MDBContainer>
-
-        <Overlay  isOpen={isOpen} closeOverlay={()=>{setIsOpen(false)}}>
-                <h2>Welcome, this is your first time here!</h2>
-                <div className="collapsible">
-                      <div className="header" {...getToggleProps()}>
-                      <input type="checkbox" id="agree" onChange={checkboxHandler} />
-                         <label forhtml="agree"> I agree to the <b  style={{cursor:"pointer"}}>payment policy</b></label>
-                      </div>
-                      <div {...getCollapseProps()}>
-                          <div className="content">
-                          After registering for a course, if the student wants to withdraw himself/herself from 
-                          the admission procedure the refunds to credit cards may take up to 5 business days.
-                          No refund will be granted after progress in the course exceeds 50%
-                           </div>
-                       </div>
-                    </div><br></br><br></br>
-                    <div>
-                      <h4>Contract:</h4>
-                <p>{contract}</p>
-                </div>
-                <text>Please enter your new password</text>
-                <MDBInput wrapperClass='mb-4 mx-5 w-100' labelClass='text-white' label='Password' id='formControlLg' type='password' size="lg" style={{width:"450px",marginLeft:"-50px"}} onChange={handleNewPasswordChange} value={newPassword}/>
-                <button style={{backgroundColor:"#212486",color:"white",marginLeft:"350px"}} onClick={handleAccept} >
-                    Accept contract
-                </button>
-                {firstLoginError && <p style={{color:"red"}}>{firstLoginError}</p>}
-            </Overlay>
-
-            <Overlay  isOpen={isOpenCTrainee} closeOverlay={()=>{setIsOpenCTrainee(false)}}>
-                <h2>Welcome, this is your first time here!</h2>
-                <text>Please enter your new password</text>
-                <MDBInput wrapperClass='mb-4 mx-5 w-100' labelClass='text-white' label='Password' id='formControlLg' type='password' size="lg" style={{width:"450px",marginLeft:"-50px"}} onChange={handleNewPasswordChange} value={newPassword}/>
-                <button style={{backgroundColor:"#212486",color:"white",marginLeft:"350px"}} onClick={handleAcceptCTrainee} >
-                    Change password
-                </button>
-                {firstLoginError && <p style={{color:"red"}}>{firstLoginError}</p>}
-            </Overlay>
         </div>
 
       );
