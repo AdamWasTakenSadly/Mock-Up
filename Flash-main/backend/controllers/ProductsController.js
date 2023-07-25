@@ -1,6 +1,7 @@
 //const currency = require("iso-country-currency")
 
 const Product = require("../models/ProductsModel");
+
 const User = require("../models/UsersModel");
 
 //GET all products
@@ -139,9 +140,22 @@ const buyProduct = async (req, res) => {
       return res.status(400).json({ error: "User not found" });
     }
 
+    /*const productsSchemaName = Product.collection.name;
+
+    console.log(productsSchemaName);*/
+
     let cartTemp = user.cart;
     console.log("logged in");
-    cartTemp.push({ productName: productName, productID: productID });
+    const product = await Product.findById(productID);
+    if (!product) {
+      return res.status(400).json({ error: "Product not found" });
+    }
+
+    if (cartTemp.find((product) => (product.id = productID))) {
+      cartTemp.find((product) => (product.quantity = product.quantity + 1));
+    } else {
+      cartTemp.push({ product });
+    }
 
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },
@@ -173,7 +187,8 @@ const removeProduct = async (req, res) => {
     //if (cartTemp.find({ productID: productID })) {
     // }
 
-    cartTemp = cartTemp.filter((product) => productID != productID);
+    //cartTemp = cartTemp.filter((product) => productID != productID);
+    cartTemp.find((product) => (product.quantity = product.quantity - 1));
 
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },

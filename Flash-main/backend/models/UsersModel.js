@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const ProductsModel = require("./ProductsModel");
 
 const Schema = mongoose.Schema;
 
@@ -17,10 +18,26 @@ const userSchema = mongoose.Schema(
       required: true,
     },
 
-    cart: [
+    /*cart: [
       {
         productName: { type: String, required: true },
         productID: { type: mongoose.Schema.Types.ObjectId, required: true },
+      },
+    ],*/
+
+    cart: [
+      {
+        // Embed the product information directly
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "ProductsModel", // Use the ProductsModel schema as the type
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+          default: 1,
+        },
       },
     ],
   },
