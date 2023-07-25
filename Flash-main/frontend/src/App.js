@@ -30,7 +30,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar1 />
+       {/* <Navbar1 />*/}
 
         <div className='pages'>
 
@@ -55,7 +55,7 @@ function App() {
 
           </Routes>
         </div>
-        <Footer />
+        {/*<Footer />*/}
 
 
       </BrowserRouter>
