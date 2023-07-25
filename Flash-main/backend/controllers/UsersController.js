@@ -1,68 +1,63 @@
-const User = require('../models/UsersModel')
+const User = require("../models/UsersModel");
 
 //GET all users
 const getUsers = async (req, res) => {
-    try{
-        const products= await User.find().select()
-        res.status(200).json(products)
-    }
-    catch(error)
-    {
-        res.status(400).json({ error: error.message })
-    }
-}
+  try {
+    const products = await User.find().select();
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 //GET a single user
 const getUser = async (req, res) => {
-    try {
-        const id = req.params.id
-        const user = await User.findOne({ _id: id });
-        res.status(200).json(user)
-    }
-    catch (error) {
-        res.status(400).json({ error: error.message })
-    }
-}
+  try {
+    const id = req.params.id;
+    const user = await User.findOne({ _id: id });
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 //GET a single user username
-const getUserUsername= async (req,res)=>{
-    try{
-        const id = req.params.id
-        const username = await User.findById({"_id":id}).select({ username:1})
-        res.status(200).json(username )
-    }
-    catch(error)
-    {
-        res.status(400).json({ error: error.message })
-    }
-}
+const getUserUsername = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const username = await User.findById({ _id: id }).select({ username: 1 });
+    res.status(200).json(username);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 //GET a single user email
-const getUserEmail = async (req,res)=>{
-    try{
-        const id = req.params.id
-        const email = await User.findById({"_id":id}).select({ email:1})
-        res.status(200).json(email )
-    }
-    catch(error)
-    {
-        res.status(400).json({ error: error.message })
-    }
-}
+const getUserEmail = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const email = await User.findById({ _id: id }).select({ email: 1 });
+    res.status(200).json(email);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 //GET a single user email
-const getUserCart = async (req,res)=>{
-    try{
-        const id = req.params.id
-        const cart = await User.findById({"_id":id}).select({ cart:1})
-        res.status(200).json(cart )
-    }
-    catch(error)
-    {
-        res.status(400).json({ error: error.message })
-    }
-}
+const getUserCart = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const cart = await User.findById({ _id: id }).select({ cart: 1 });
+    res.status(200).json(cart);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
-
-module.exports = { getUsers, getUser, getUserUsername, getUserEmail, getUserCart}
-
+module.exports = {
+  getUsers,
+  getUser,
+  getUserUsername,
+  getUserEmail,
+  getUserCart,
+};
