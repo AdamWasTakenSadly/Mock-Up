@@ -211,7 +211,7 @@ const getCartProducts = async (req, res) => {
       if (product) {
         return {
           productName: product.name,
-          
+          productID: product._id,
           productImage: product.image,
           productPrice: product.price,
         };
