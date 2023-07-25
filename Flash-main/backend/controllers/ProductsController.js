@@ -188,6 +188,47 @@ const removeProduct = async (req, res) => {
   }
 };
 
+const getCartProducts = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    // Find the user by ID and select the 'cart' field
+    const user = await User.findById(userId).select('cart');
+
+    if (!user) {
+      return res.status(400).json({ error: "User not found" });
+    }
+
+    // Extract product IDs from the user's cart
+    const productIDs = user.cart.map((product) => product.productID);
+
+    // Fetch the products from the database based on the product IDs
+    const products = await Product.find({ _id: { $in: productIDs } });
+
+    // Map the product details (name, image, price) to the cart items
+    const cartWithProducts = user.cart.map((cartItem) => {
+      const product = products.find((p) => p._id.equals(cartItem.productID));
+      if (product) {
+        return {
+          productName: product.name,
+          
+          productImage: product.image,
+          productPrice: product.price,
+        };
+      }
+      return null;
+    });
+
+    // Remove any null entries (products not found)
+    const filteredCart = cartWithProducts.filter(Boolean);
+
+    res.status(200).json(filteredCart);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
 module.exports = {
   getProducts,
   getProduct,
@@ -199,4 +240,5 @@ module.exports = {
   addProduct,
   buyProduct,
   removeProduct,
+  getCartProducts
 };

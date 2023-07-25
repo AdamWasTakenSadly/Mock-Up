@@ -32,14 +32,24 @@ function Navbar1() {
   }
 
   const [isCartPopoverOpen, setCartPopoverOpen] = useState(false);
+  const [cartProducts, setCartProducts] = useState([]);
 
-  const openCartPopover = () => {
-    setCartPopoverOpen(true);
+
+
+
+  const getCartProducts = async () => {
+    try {
+      
+      const response = await fetch('/products/getCartProducts'); 
+      if (response.ok) {
+        const cartProductsData = await response.json();
+        setCartProducts(cartProductsData); 
+      }
+    } catch (error) {
+      console.error('Error fetching cart products:', error);
+    }
   };
 
-  const closeCartPopover = () => {
-    setCartPopoverOpen(false);
-  };
   const fetchID = async () => {
     const response = await fetch('/login/userId')
     const json = await response.json()
@@ -51,6 +61,15 @@ function Navbar1() {
     }
 }
  
+
+
+useEffect(() => {
+  // Fetch the user's cart products when the popover is opened
+  if (isCartPopoverOpen) {
+    getCartProducts(); // Call the function to fetch cart products
+  }
+}, [isCartPopoverOpen]);
+
     useEffect(()=>{
        
       
@@ -151,7 +170,7 @@ function Navbar1() {
   Shop Now
 </Nav.Link>
 
-      
+    
 <Nav.Link
   href=""  style={{
     backgroundImage: "linear-gradient(to bottom,  #0099D3, #006DA3)",
@@ -162,49 +181,84 @@ function Navbar1() {
     padding: "13px 0px 0px 16px",marginTop:"40px"
   }}><img width="60%" src="/search.png"/>  </Nav.Link>     
          
-         <OverlayTrigger
-        trigger="click"
-        placement="bottom"
-        show={isCartPopoverOpen}
-        onToggle={(nextOpen) => setCartPopoverOpen(nextOpen)}
-        overlay={
-          <Popover id="cart-popover">
-            {/* Your cart content goes here */}
-            <Popover.Header as="h3" style={{
-            backgroundImage: "linear-gradient(to bottom, #0099D3, #006DA3)",
-            color: "white", // Text color
-                fontSize: "18px", // Font size
-                fontFamily: "Montserrat", // Font family
-                padding: "10px", // Padding
-                borderRadius: "0px", // Border radius
-              }}>Your Cart</Popover.Header>
-            <Popover.Body>
-              <p>Items in the cart...</p>
-            </Popover.Body>
-          </Popover>
-        }
-      >
-        <Nav.Link
-          href=""
-          style={{
-            backgroundImage: "linear-gradient(to bottom, #0099D3, #006DA3)",
-            width: "60px",
-            height: "50px",
-            borderRadius: "40px",
-            marginLeft: "25px",
-            padding: "13px 0px 0px 15px",
-            marginTop: "40px"
-          }}
-        >
-          <img
-            width="60%"
-            src="/cart.png"
-            alt="Cart"
-            onClick={openCartPopover}
-          />
-        </Nav.Link>
-      </OverlayTrigger>
 
+         {isGuest  &&     <Nav.Link
+  href="/login"  style={{
+    backgroundImage: "linear-gradient(to bottom,  #0099D3, #006DA3)",
+    width: "60px", // Set the width
+    height: "50px", // Set the height
+    borderRadius: "40px", // Set the border radius,
+    marginLeft:"25px",
+    padding: "10px 0px 0px 16px",marginTop:"40px"
+  }}><img width="65%" src="/login.png"/>  </Nav.Link>  }
+
+
+         {!isGuest  &&
+         <OverlayTrigger
+      trigger="click"
+      placement="bottom"
+      show={isCartPopoverOpen}
+      onToggle={(nextOpen) => setCartPopoverOpen(nextOpen)}
+      overlay={
+        <Popover id="cart-popover">
+          {}
+          <Popover.Header
+            as="h3"
+            style={{
+              backgroundImage: "linear-gradient(to bottom, #0099D3, #006DA3)",
+              color: "white", 
+              fontSize: "18px", 
+              fontFamily: "Montserrat", 
+              padding: "10px", 
+              borderRadius: "0px", 
+            }}
+          >
+            Your Cart
+          </Popover.Header>
+          <Popover.Body>
+            {cartProducts.length === 0 ? (
+              <p>No items in the cart.</p>
+            ) : (
+              <ul>
+                {cartProducts.map((product, index) => (
+                  <li key={index}>
+                    {}
+                    <div>
+                      <img src={product.image} alt={product.productName} />
+                      <span>{product.name}</span>
+                      <span>${product.price}</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Popover.Body>
+        </Popover>
+      }
+    >
+      {/* Your cart trigger goes here */}
+      {/* This could be a cart icon or button */}
+      <Nav.Link
+        href=""
+        style={{
+          backgroundImage: "linear-gradient(to bottom, #0099D3, #006DA3)",
+          width: "60px",
+          height: "50px",
+          borderRadius: "40px",
+          marginLeft: "25px",
+          padding: "13px 0px 0px 15px",
+          marginTop: "40px"
+        }}
+      >
+        <img
+          width="60%"
+          src="/cart.png"
+          alt="Cart"
+          onClick={() => setCartPopoverOpen(!isCartPopoverOpen)}
+        />
+      </Nav.Link>
+    </OverlayTrigger>
+}
           
            </Nav>
          
