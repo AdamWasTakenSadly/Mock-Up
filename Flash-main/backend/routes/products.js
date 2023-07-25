@@ -10,6 +10,7 @@ const {
   addProduct,
   buyProduct,
   removeProduct,
+  getCartProducts
 } = require("../controllers/ProductsController");
 const router = express.Router();
 const { requireAuth } = require("../Middleware/authMiddleware");
@@ -44,5 +45,7 @@ router.post("/", addProduct);
 router.post("/buyProduct", requireAuth, buyProduct);
 
 router.post("/removeProduct", requireAuth, removeProduct);
+
+router.post("/getCartProducts", requireAuth, getCartProducts);
 
 module.exports = router;
