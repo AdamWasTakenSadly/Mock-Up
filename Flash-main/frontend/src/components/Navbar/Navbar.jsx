@@ -146,7 +146,7 @@ useEffect(() => {
     fontFamily: 'Montserrat'}}> Blog</Nav.Link>
   <Nav.Link  href={""} style={{   color:'#006DA3',fontSize:'24px',marginLeft:"15px",marginTop:"40px",
     fontFamily: 'Montserrat'}}> Contact</Nav.Link>
-  <Navbar.Brand style={{marginLeft:"180px"}}><img width="60%"  src="/swan.png"/>  </Navbar.Brand>
+  <Navbar.Brand href={"/"}  style={{marginLeft:"180px"}}><img width="60%"  src="/swan.png"/>  </Navbar.Brand>
 
 
   <Nav.Link

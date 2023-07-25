@@ -1,18 +1,20 @@
 
 import React from 'react'
 import { useState,useEffect } from 'react';
-import {
+
+  import {
     MDBBtn,
     MDBContainer,
-    MDBRow,
-    MDBCol,
     MDBCard,
     MDBCardBody,
     MDBInput,
-    MDBIcon
+    MDBIcon,
+    MDBRow,
+    MDBCol,
+    MDBCheckbox
   }
   from 'mdb-react-ui-kit';
-  import useCollapse from 'react-collapsed';
+  //import useCollapse from 'react-collapsed';
 
 
 const SignUp =()=>{
@@ -46,7 +48,7 @@ const handleEmailChange=(event)=>{
        
         else
         {
-            const response =  fetch("/login/signup",
+            const response =  fetch("/signup",
             {
              method:'POST',
              body: JSON.stringify({
@@ -65,7 +67,7 @@ const handleEmailChange=(event)=>{
               else{
                 console.log(data);
                 // Handle data
-                window.location.href="/"+data.type+"/"+data.id 
+                window.location.href="/login"
               }
              })
              .catch((err) => {
@@ -77,42 +79,81 @@ const handleEmailChange=(event)=>{
     const goToLogin=()=>{
         window.location.href="/login"
     }
+    const facebook=()=>{
+      window.location.href="https://www.facebook.com/"
+  }
+  const google=()=>{
+    window.location.href="https://www.google.com/"
+}
+const twitter=()=>{
+  window.location.href="https://twitter.com/i/flow/login?redirect_after_login=%2F"
+}
+const github=()=>{
+  window.location.href="https://github.com/login"
+}
 
     return (
-        <MDBContainer fluid>
-    
-          <MDBRow className='d-flex justify-content-center align-items-center h-100'>
-            <MDBCol col='12'>
-    
-              <MDBCard className=' text-white my-5 mx-auto' style={{backgroundColor:"#647cd2",borderRadius: '1rem', maxWidth: '400px'}}>
-                <MDBCardBody className='p-5 d-flex flex-column align-items-center mx-auto w-100'>
-    
-                  <h2 className="fw-bold mb-2 text-uppercase">Sign Up</h2>
-                  <p className="text-white-50 mb-5">Please enter your information.</p>
 
-                  <MDBInput wrapperClass='mb-4 mx-5 w-100' labelClass='text-white' label='Email' id='formControlLg' size="lg" onChange={handleEmailChange} value={email}/>
-                  <MDBInput wrapperClass='mb-4 mx-5 w-100' labelClass='text-white' label='Username' id='formControlLg' size="lg" onChange={handleUsernameChange} value={username}/>
-                  <MDBInput wrapperClass='mb-4 mx-5 w-100' labelClass='text-white' label='Password' id='formControlLg' type='password' size="lg" onChange={handlePasswordChange} value={password}/>
+      <MDBContainer fluid className='my-5'>
 
-                  <div>
-                  </div>
-                  <br></br>
-                  <button style={{backgroundColor:"#d55b5c"}} outline className='generalbutton mx-2 px-5' color='white' size='lg' onClick={handleSignUp} >
-                    Sign Up
-                  </button>
-                  {error && <p style={{color:"#8B0000"}}>{error}</p>}
-    <br></br>
-                  <div>
-                    <p className="mb-0">Already registered? <a href="/login" class="text-white-50 " onClick={goToLogin}>Login</a></p>
-    
-                  </div>
-                </MDBCardBody>
-              </MDBCard>
-    
-            </MDBCol>
-          </MDBRow>
-    
-        </MDBContainer>
+      <MDBRow className='g-0 align-items-center'>
+        <MDBCol col='6'>
+
+          <MDBCard className='my-5 cascading-right' style={{background: 'hsla(0, 0%, 100%, 0.55)',  backdropFilter: 'blur(30px)'}}>
+            <MDBCardBody className='p-5 shadow-5 text-center'>
+            <div className="text-center">
+        <img src="/logo.png"
+          style={{width: '185px'}} alt="logo"
+           />
+      </div>
+              <h2 className="fw-bold mb-5" style={{ color: '#006DA3' }}>Sign up now</h2>
+
+              <MDBInput wrapperClass='mb-4' label='Email' id='formControlLg' size="lg" onChange={handleEmailChange} value={email}/>
+              <MDBInput wrapperClass='mb-4' label='Username' id='formControlLg' size="lg" onChange={handleUsernameChange} value={username}/>
+              <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' type='password' size="lg" onChange={handlePasswordChange} value={password}/>
+
+              <div className='d-flex justify-content-center mb-4'>
+                <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Subscribe to our newsletter' />
+              </div>
+
+              <MDBBtn className="mb-4 w-100 gradient-custom-2" size='lg' onClick={handleSignUp}>Sign Up</MDBBtn>
+              {error && <p style={{color:"#8B0000"}}>{error}</p>}
+              <div className="text-center">
+
+                <p>or sign up with:</p>
+               
+               
+               
+               
+                <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#006DA3' }}  onClick={facebook} >
+                <i class="bi bi-facebook"></i>
+                </MDBBtn>
+
+                <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#006DA3' }} onClick={google}>
+                <i class="bi bi-google"></i>
+                </MDBBtn>
+
+                <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#006DA3' }} onClick={twitter}>
+                <i class="bi bi-twitter"></i>
+                </MDBBtn>
+
+                <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#006DA3' }} onClick={github}>
+                <i class="bi bi-github"></i>
+                </MDBBtn>
+
+              </div>
+
+            </MDBCardBody>
+          </MDBCard>
+        </MDBCol>
+
+        <MDBCol col='6'>
+          <img src="w.jpg" class="w-100 rounded-4 shadow-4"
+            alt="" fluid/>
+        </MDBCol>
+
+      </MDBRow>
+</MDBContainer> 
       );
 
 }
