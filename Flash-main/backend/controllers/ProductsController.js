@@ -133,7 +133,8 @@ const buyProduct = async (req, res) => {
     console.log(req.user.id);
     const userId = req.user.id;
     const productID = req.body.id;
-    const productName = req.body.cart;
+    console.log(productID);
+    // const productName = req.body.cart;
 
     const user = await User.findById(userId);
     if (!user) {
@@ -151,10 +152,14 @@ const buyProduct = async (req, res) => {
       return res.status(400).json({ error: "Product not found" });
     }
 
-    if (cartTemp.find((product) => (product.id = productID))) {
-      cartTemp.find((product) => (product.quantity = product.quantity + 1));
+    // Check if the product already exists in the cart by its ID
+    const existingProduct = cartTemp.find(
+      (item) => item.product._id.toString() === productID
+    );
+    if (existingProduct) {
+      existingProduct.quantity += 1;
     } else {
-      cartTemp.push({ product });
+      cartTemp.push({ product, quantity: 1 });
     }
 
     const updatedUser = await User.findOneAndUpdate(
@@ -172,7 +177,7 @@ const buyProduct = async (req, res) => {
 
 const removeProduct = async (req, res) => {
   try {
-    console.log(req.user.id);
+    //console.log(req.user.id);
     const userId = req.user.id;
     const productID = req.body.id;
     //const productName = req.body.cart;
@@ -184,11 +189,27 @@ const removeProduct = async (req, res) => {
 
     let cartTemp = user.cart;
     console.log("logged in");
-    //if (cartTemp.find({ productID: productID })) {
-    // }
 
-    //cartTemp = cartTemp.filter((product) => productID != productID);
-    cartTemp.find((product) => (product.quantity = product.quantity - 1));
+    const indexOfProduct = cartTemp.findIndex(
+      (item) => item.product._id.toString() === productID
+    );
+
+    console.log(indexOfProduct);
+    console.log(cartTemp[indexOfProduct].quantity);
+
+    if (indexOfProduct !== -1) {
+      if (cartTemp[indexOfProduct].quantity > 1) {
+        // Decrement the quantity if it's greater than 1
+        cartTemp[indexOfProduct].quantity--;
+        console.log("hiiii");
+      } else {
+        // Filter out the product from the cart if its quantity is 1 or less
+        cartTemp = cartTemp.filter(
+          (item) => item.product._id.toString() !== productID
+        );
+        console.log("hiiii");
+      }
+    }
 
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },
