@@ -215,14 +215,14 @@ const getCartProducts = async (req, res) => {
     }
 
     // Extract product IDs from the user's cart
-    const productIDs = user.cart.map((product) => product.productID);
+    const productIDs = user.cart.map((product) => product.product);
 
     // Fetch the products from the database based on the product IDs
     const products = await Product.find({ _id: { $in: productIDs } });
 
     // Map the product details (name, image, price) to the cart items
     const cartWithProducts = user.cart.map((cartItem) => {
-      const product = products.find((p) => p._id.equals(cartItem.productID));
+      const product = products.find((p) => p._id.equals(cartItem.product));
       if (product) {
         return {
           productName: product.name,
