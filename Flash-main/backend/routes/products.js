@@ -15,6 +15,9 @@ const {
 const router = express.Router();
 const { requireAuth } = require("../Middleware/authMiddleware");
 
+
+router.get("/getCartProducts", requireAuth, getCartProducts);
+
 //for a logged in user and the same are created for a guest
 //GET all products
 router.get("/", requireAuth, getProducts);
@@ -46,6 +49,6 @@ router.post("/buyProduct", requireAuth, buyProduct);
 
 router.post("/removeProduct", requireAuth, removeProduct);
 
-router.post("/getCartProducts", requireAuth, getCartProducts);
+
 
 module.exports = router;
