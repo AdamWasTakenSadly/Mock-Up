@@ -29,10 +29,35 @@ const userSchema = mongoose.Schema(
       {
         // Embed the product information directly
         product: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: mongoose.Schema.Types.Object,
           ref: "ProductsModel", // Use the ProductsModel schema as the type
           required: true,
         },
+        /* id: {
+          type: String,
+          required: true,
+        },
+
+        name: {
+          type: String,
+          required: true,
+        },
+        description: {
+          type: String,
+          required: true,
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
+        rating: {
+          type: Number,
+          default: 0,
+        },
+        image: {
+          type: String,
+          required: true,
+        },*/
         quantity: {
           type: Number,
           required: true,
