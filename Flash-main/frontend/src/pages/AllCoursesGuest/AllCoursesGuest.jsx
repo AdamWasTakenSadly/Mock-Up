@@ -13,14 +13,14 @@ const AllCourses =() => {
     useEffect(()=>{
         const fetchCourses = async ()=>{
             //const response = await fetch ('/courses/guest')
-            const json = await response.json()
+            //const json = await response.json()
 
-            console.log(json)
+           // console.log(json)
 
-            if (response.ok)
-            {
-                setCourses(json)
-            }
+           // if (response.ok)
+          //  {
+          //      setCourses(json)
+          //  }
           }
 
         fetchCourses()
