@@ -23,13 +23,13 @@ const CourseDetailsGuest = ({ course }) => {
     const fetchRatings = async () => {
 
        // const response = await fetch('/courses/' + course._id + '/ratings/guest')
-        const json = await response.json()
+       // const json = await response.json()
 
-        console.log(json)
+        //console.log(json)
 
-        if (response.ok) {
-            setRatings(json)
-        }
+        //if (response.ok) {
+        //    setRatings(json)
+        //}
 
 
     }

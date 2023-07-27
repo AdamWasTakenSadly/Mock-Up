@@ -1,0 +1,68 @@
+// productDetails.scss
+
+.card {
+    margin: 10px;
+    width: 300px; // Adjust the width as needed
+    border: 0; 
+    
+    .MuiCard-root {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+  
+    .MuiCardMedia-root {
+      object-fit: cover;
+      height: 200px; // Adjust the image height as needed
+    }
+  
+    .MuiCardContent-root {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  
+    .t1 {
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+  
+    .t2 {
+      font-size: 14px;
+      margin-bottom: 5px;
+  
+      strong {
+        margin-right: 5px;
+      }
+    }
+  }
+  //card animations 
+  .card:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+  }
+  .cardMedia img {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .cardMedia:hover img {
+    transform: scale(1.1);
+  }
+  .btn-mdb { //Add to cart button styling
+    /* Add any styles specific to the MDBBtn component here */
+   font-size: 14px;
+   padding: 10px 20px;
+   color: white;
+   font-family: 'Montserrat';
+   background-image: linear-gradient(to bottom, #0099D3, #006DA3);
+   font-size: 18px;
+   width: 170px;
+   height: 50px;
+   padding: 0;
+   border-radius: 40px;
+   display: flex;
+   align-items: center;
+  justify-content: center;
+  }
+  

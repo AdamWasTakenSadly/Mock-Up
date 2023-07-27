@@ -22,6 +22,7 @@ import ForgetPassword from './pages/forgetPassword/ForgetPassword'
 import ChangePassword from './pages/changePassword/ChangePassword'
 import AccessDenied from './pages/AccessDenied'
 import Cookie from 'js-cookie'
+import Shop from './pages/ShopPage/Shop'
 
 
 
@@ -47,7 +48,7 @@ function App() {
                  <Route path="/signup" element={<SignUp />} />
                  <Route path='reset-password/:id' element={<ChangePassword />} />
                  <Route path='user/write-email' element={<ForgetPassword />} />
-    
+                 <Route path ='/shop' element ={<Shop/>}/>
 
 
             <Route path="*" element={<AccessDenied />} />

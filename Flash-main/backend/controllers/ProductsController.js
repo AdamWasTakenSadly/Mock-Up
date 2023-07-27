@@ -265,6 +265,18 @@ const getCartProducts = async (req, res) => {
   }
 };
 
+const searchProduct = async (req, res) => {
+  try {
+    const prefix = req.body.prefix || ''; // Get the search prefix from the query parameter
+    const query = { name: { $regex: `${prefix}`, $options: 'i' } };
+    const products = await Product.find(query);
+    res.status(200).json(products);
+  } catch (error) {
+    console.error('Error searching products:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 module.exports = {
   getProducts,
   getProduct,
@@ -276,5 +288,6 @@ module.exports = {
   addProduct,
   buyProduct,
   removeProduct,
-  getCartProducts
+  getCartProducts,
+  searchProduct
 };
