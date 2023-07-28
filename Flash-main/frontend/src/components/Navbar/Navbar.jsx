@@ -24,7 +24,8 @@ function Navbar1() {
   const [isGuest,setIsGuest] = useState(null)
   const [userId,setUserId]=useState(null)
   const [isOpen, setIsOpen] = useState(false);
-  
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
+
   const [search,setSearch] = useState('');
 
   const togglePopup = () => {
@@ -50,16 +51,7 @@ function Navbar1() {
     }
   };
 
-  const fetchID = async () => {
-    const response = await fetch('/login/userId')
-    const json = await response.json()
 
-    //console.log(json.id)
-
-    if (response.ok) {
-        setUserId(json.id)
-    }
-}
  
 
 
@@ -70,26 +62,20 @@ useEffect(() => {
   }
 }, [isCartPopoverOpen]);
 
-    useEffect(()=>{
-       
-      
-        let role=Cookie.get('role')
-        console.log(role)
-            if (role === undefined)
-                {
-                  setIsGuest(true)
-                }
-              
-              else{
-                setIsGuest(false)
-                fetchID()
-              }
 
-
-       
-       },[])
-       const [errorMessage, setErrorMessage] = useState('');
-
+useEffect(() => {
+  try {
+    const token = Cookie.get("user_token");
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  } catch (error) {
+    console.error("Error retrieving token:", error);
+    setIsLoggedIn(false);
+  }
+}, []);
 
 
       const handleChange = (e) => {
@@ -113,30 +99,29 @@ useEffect(() => {
       textAlign: "center",
       fontFamily: "Montserrat",
       fontSize: "15px",
-      height: "30px"
+      height: "30px",
 
     }}
   >
     Get 10% off your First Order
   </div>
-<Navbar className="nav" expand="lg" style={{
-      backgroundImage: "linear-gradient(to bottom, #D8E7F7, #FFFFFF)",
-      boxShadow: "none"
-    }}>
-
-       
+  <Navbar
+      className="nav"
+      expand="lg"
+      style={{
+        backgroundImage: "linear-gradient(to bottom, #D8E7F7, #FFFFFF)",
+        boxShadow: "none",
+      }}
+    >
+      <Container fluid>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
-
-      
-         
           <Nav
             className="me-auto my-2 my-lg-0"
-            style={{ maxHeight: '150px' }}
+            style={{ maxHeight: "150px" }}
             navbarScroll
           >
-
-   <Nav.Link  href={"/guest/courses"} style={{   color:'#006DA3',fontSize:'24px',marginLeft:"25px",marginTop:"40px",
+            <Nav.Link  href={"/guest/courses"} style={{   color:'#006DA3',fontSize:'24px',marginLeft:"25px",marginTop:"40px",
     fontFamily: 'Montserrat'}}> Products</Nav.Link>
   <Nav.Link  href={""} style={{   color:'#006DA3',fontSize:'24px',marginLeft:"15px",marginTop:"40px",
     fontFamily: 'Montserrat'}}> About</Nav.Link>
@@ -146,123 +131,131 @@ useEffect(() => {
     fontFamily: 'Montserrat'}}> Blog</Nav.Link>
   <Nav.Link  href={""} style={{   color:'#006DA3',fontSize:'24px',marginLeft:"15px",marginTop:"40px",
     fontFamily: 'Montserrat'}}> Contact</Nav.Link>
-  <Navbar.Brand href={"/"}  style={{marginLeft:"180px"}}><img width="60%"  src="/swan.png"/>  </Navbar.Brand>
+          </Nav>
+          <Navbar.Brand href={"/"} className="mx-auto">
+  <img width="60%" src="/swan.png" alt="Logo" />
+</Navbar.Brand>
 
 
-  <Nav.Link
-  href="/guest/courses"
-  style={{
-    color: "white",
-    fontFamily: 'Montserrat',
-    backgroundImage: "linear-gradient(to bottom,  #0099D3, #006DA3)",
-    fontSize: '18px',
-    width: "170px", // Set the width
-    height: "50px", // Set the height
-    padding: "0px 0px 0px 0px", // Adjust the padding as needed
-    borderRadius: "40px", // Set the border radius
-    display: "flex", // Use flex display to apply gap
-    alignItems: "center", // Center the text vertically
-    justifyContent: "center",
-    marginLeft: "120px",
-    marginTop: "40px",
-  }}
->
-  Shop Now
-</Nav.Link>
-
-    
-<Nav.Link
-  href=""  style={{
-    backgroundImage: "linear-gradient(to bottom,  #0099D3, #006DA3)",
-    width: "60px", // Set the width
-    height: "50px", // Set the height
-    borderRadius: "40px", // Set the border radius,
-    marginLeft:"25px",
-    padding: "13px 0px 0px 16px",marginTop:"40px"
-  }}><img width="60%" src="/search.png"/>  </Nav.Link>     
-         
-
-         {isGuest  &&     <Nav.Link
-  href="/login"  style={{
-    backgroundImage: "linear-gradient(to bottom,  #0099D3, #006DA3)",
-    width: "60px", // Set the width
-    height: "50px", // Set the height
-    borderRadius: "40px", // Set the border radius,
-    marginLeft:"25px",
-    padding: "10px 0px 0px 16px",marginTop:"40px"
-  }}><img width="65%" src="/login.png"/>  </Nav.Link>  }
-
-
-         {!isGuest  &&
-         <OverlayTrigger
-      trigger="click"
-      placement="bottom"
-      show={isCartPopoverOpen}
-      onToggle={(nextOpen) => setCartPopoverOpen(nextOpen)}
-      overlay={
-        <Popover id="cart-popover">
-          {}
-          <Popover.Header
-            as="h3"
+          <Nav.Link
+            href="/guest/courses"
             style={{
+              color: "white",
+              fontFamily: "Montserrat",
               backgroundImage: "linear-gradient(to bottom, #0099D3, #006DA3)",
-              color: "white", 
-              fontSize: "18px", 
-              fontFamily: "Montserrat", 
-              padding: "10px", 
-              borderRadius: "0px", 
+              fontSize: "18px",
+              width: "170px",
+              height: "50px",
+              padding: "0px 0px 0px 0px",
+              borderRadius: "40px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginLeft: "120px",
+              marginTop: "40px",
             }}
           >
-            Your Cart
-          </Popover.Header>
-          <Popover.Body>
-            {cartProducts.length === 0 ? (
-              <p>No items in the cart.</p>
-            ) : (
-              <ul>
-                {cartProducts.map((product, index) => (
-                  <li key={index}>
-                    {}
-                    <div>
-                      <img src={product.image} alt={product.productName} />
-                      <span>{product.name}</span>
-                      <span>${product.price}</span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </Popover.Body>
-        </Popover>
-      }
-    >
-      {/* Your cart trigger goes here */}
-      {/* This could be a cart icon or button */}
-      <Nav.Link
-        href=""
-        style={{
-          backgroundImage: "linear-gradient(to bottom, #0099D3, #006DA3)",
-          width: "60px",
-          height: "50px",
-          borderRadius: "40px",
-          marginLeft: "25px",
-          padding: "13px 0px 0px 15px",
-          marginTop: "40px"
-        }}
-      >
-        <img
-          width="60%"
-          src="/cart.png"
-          alt="Cart"
-          onClick={() => setCartPopoverOpen(!isCartPopoverOpen)}
-        />
-      </Nav.Link>
-    </OverlayTrigger>
-}
-          
-           </Nav>
-         
+            Shop Now
+          </Nav.Link>
+
+          <Nav.Link
+            href=""
+            style={{
+              backgroundImage: "linear-gradient(to bottom, #0099D3, #006DA3)",
+              width: "60px",
+              height: "50px",
+              borderRadius: "40px",
+              marginLeft: "25px",
+              padding: "13px 0px 0px 16px",
+              marginTop: "40px",
+            }}
+          >
+            <img width="60%" src="/search.png" alt="Search" />
+          </Nav.Link>
+  {/* If the user is a guest, show the login icon */}
+  {!isLoggedIn && (
+            <Nav.Link
+              href="/login"
+              style={{
+                backgroundImage: "linear-gradient(to bottom, #0099D3, #006DA3)",
+                width: "60px",
+                height: "50px",
+                borderRadius: "40px",
+                marginLeft: "25px",
+                padding: "10px 0px 0px 16px",
+                marginTop: "40px",
+              }}
+            >
+              <img width="65%" src="/login.png" alt="Login" />
+            </Nav.Link>
+          )}
+          {isLoggedIn && (
+              <OverlayTrigger
+              trigger="click"
+              placement="bottom"
+              show={isCartPopoverOpen}
+              onToggle={(nextOpen) => setCartPopoverOpen(nextOpen)}
+              overlay={
+                <Popover id="cart-popover">
+                  <Popover.Header
+                    as="h3"
+                    style={{
+                      backgroundImage: "linear-gradient(to bottom, #0099D3, #006DA3)",
+                      color: "white", // Text color
+                      fontSize: "18px", // Font size
+                      fontFamily: "Montserrat", // Font family
+                      padding: "10px", // Padding
+                      borderRadius: "0px", // Border radius
+                    }}
+                  >
+                    Your Cart
+                  </Popover.Header>
+                  <Popover.Body>
+                    {cartProducts.length === 0 ? (
+                      <p>No items in the cart.</p>
+                    ) : (
+                      <ul>
+                        {cartProducts.map((product, index) => (
+                          <li key={index}>
+                            <div>
+                              <img src={product.image} alt={product.productName} />
+                              <span>{product.name}</span>
+                              <span>${product.price}</span>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </Popover.Body>
+                </Popover>
+              }
+            >
+             
+              <Nav.Link
+                href=""
+                style={{
+                  backgroundImage: "linear-gradient(to bottom, #0099D3, #006DA3)",
+                  width: "60px",
+                  height: "50px",
+                  borderRadius: "40px",
+                  marginLeft: "25px",
+                  padding: "13px 0px 0px 15px",
+                  marginTop: "40px"
+                }}
+              >
+                <img
+                  width="60%"
+                  src="/cart.png"
+                  alt="Cart"
+                  onClick={() => setCartPopoverOpen(!isCartPopoverOpen)}
+                />
+              </Nav.Link>
+            </OverlayTrigger>
+          )}
+
+        
         </Navbar.Collapse>
+      </Container>
     </Navbar>
     </div>
    
