@@ -6,16 +6,12 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import Navbar1 from './components/Navbar/Navbar'
 
-
-import AllCoursesGuest from './pages/AllCoursesGuest/AllCoursesGuest'
 import Login from './pages/Login/Login'
 
 
 
 import Footer from './components/Footer/Footer'
 import Home from './pages/Home/Home'
-
-import SearchCoursesGuest from './pages/SearchCoursesGuest/SearchCoursesGuest'
 
 import SignUp from './pages/SignUp/SignUp'
 import ForgetPassword from './pages/forgetPassword/ForgetPassword'
@@ -28,6 +24,8 @@ import Shop from './pages/ShopPage/Shop'
 
 function App() {
 
+  let isLoggedIn = Cookie.get('jwt')
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -37,20 +35,22 @@ function App() {
 
           <Routes>
 
-
             <Route path="/" element={<Home />} />
+            <Route path ='/shop' element ={<Shop/>}/>
 
-                
-                  <Route path="/guest/courses" element={<AllCoursesGuest />} />
-                  
-                  <Route path="/courses/search/guest" element={<SearchCoursesGuest />} />
-                  <Route path="/login" element={<Login />} />
-                 <Route path="/signup" element={<SignUp />} />
-                 <Route path='reset-password/:id' element={<ChangePassword />} />
-                 <Route path='user/write-email' element={<ForgetPassword />} />
-                 <Route path ='/shop' element ={<Shop/>}/>
-
-
+            {isLoggedIn==undefined?
+            (
+            <Route>
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<SignUp />} /> 
+              <Route path='reset-password/:id' element={<ChangePassword />} />
+              <Route path='user/write-email' element={<ForgetPassword />} />
+            </Route>
+            )
+            : 
+            (<Route path="/" element={<Home />} />)
+          }
+            
             <Route path="*" element={<AccessDenied />} />
 
 
