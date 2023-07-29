@@ -45,6 +45,7 @@ function Navbar1() {
       if (response.ok) {
         const cartProductsData = await response.json();
         setCartProducts(cartProductsData); 
+        console.log(cartProductsData)
       }
     } catch (error) {
       console.error('Error fetching cart products:', error);
@@ -65,7 +66,9 @@ useEffect(() => {
 
 useEffect(() => {
   try {
-    const token = Cookie.get("user_token");
+    const token = Cookie.get('jwt');
+    console.log("here");
+    console.log(token);
     if (token) {
       setIsLoggedIn(true);
     } else {
@@ -138,7 +141,7 @@ useEffect(() => {
 
 
           <Nav.Link
-            href="/guest/courses"
+            href="/shop"
             style={{
               color: "white",
               fontFamily: "Montserrat",

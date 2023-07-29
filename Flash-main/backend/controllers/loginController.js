@@ -29,7 +29,7 @@ const login=async(req, res) => {
         if(passwordVerified)
         {
             const token = createToken(user.username,user._id)
-            res.cookie('jwt', token, { httpOnly: true, maxAge: 24*60*60*1000 });
+            res.cookie('jwt', token, { httpOnly: false, maxAge: 24*60*60*1000 });
            // res.cookie('role','corporateTrainee',{ httpOnly: false, maxAge: 24*60*60*1000 })
             return res.status(200).json({ id:user._id,msg:"Login success" })
         }
@@ -67,7 +67,7 @@ const signUp = async (req, res) => {
             const hashedPassword = await bcrypt.hash(password, salt);
             const user = await User.create({ username: username, email: email, password: hashedPassword });
             const token = createToken(user.username,user._id);
-            res.cookie('jwt', token, { httpOnly: true, maxAge: 24*60*60*1000 });
+            res.cookie('jwt', token, { httpOnly: false, maxAge: 24*60*60*1000 });
             //res.cookie('role','individualTrainee',{ httpOnly: false, maxAge: 24*60*60*1000 })
            return  res.status(200).json({id:user._id,msg:"Sign Up success"})
         } catch (error) {
@@ -79,8 +79,12 @@ const signUp = async (req, res) => {
 
 //logout
 const logOut=async(req,res)=>{
-    res.cookie('jwt', "", { httpOnly: true, maxAge:  1 });
 
+    res.clearCookie('jwt', { expires: new Date(0) });
+    /*
+    res.cookie('jwt', "", { httpOnly: false, maxAge:  1 });
+    res.cookie('login', "", { httpOnly: true, maxAge:  1 });*/
+    
     //res.cookie('role', "", { httpOnly: true, maxAge:  1 });
     res.status(200).json({msg:"You are logged out!"})
 }

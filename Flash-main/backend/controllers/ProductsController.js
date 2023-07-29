@@ -243,7 +243,7 @@ const getCartProducts = async (req, res) => {
 
     // Map the product details (name, image, price) to the cart items
     const cartWithProducts = user.cart.map((cartItem) => {
-      const product = products.find((p) => p._id.equals(cartItem.product));
+      const product = products.find((p) => p._id.equals(cartItem.product._id));
       if (product) {
         return {
           productName: product.name,
