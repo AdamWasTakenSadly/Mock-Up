@@ -121,7 +121,7 @@ useEffect(() => {
             style={{ maxHeight: "150px" }}
             navbarScroll
           >
-            <Nav.Link  href={"/guest/courses"} style={{   color:'#006DA3',fontSize:'24px',marginLeft:"25px",marginTop:"40px",
+            <Nav.Link  href={"/shop"} style={{   color:'#006DA3',fontSize:'24px',marginLeft:"25px",marginTop:"40px",
     fontFamily: 'Montserrat'}}> Products</Nav.Link>
   <Nav.Link  href={""} style={{   color:'#006DA3',fontSize:'24px',marginLeft:"15px",marginTop:"40px",
     fontFamily: 'Montserrat'}}> About</Nav.Link>

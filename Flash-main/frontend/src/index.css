@@ -460,3 +460,118 @@ input[type="range"]::-webkit-slider-thumb {
 body {
   background-image: "linear-gradient(to bottom, #D8E7F7, #FFFFFF)",
 }
+img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+/* Container for left and right images */
+.image-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Adjust the width of left and right image containers */
+.left-image, .right-images {
+  flex-basis: 50%;
+  padding: 5px; /* Add some padding around each image container */
+}
+
+/* Styling for the right images */
+.right-images img {
+  width: 100%;
+
+}
+.left-image img {
+  width: 100%;
+  height: 900px;
+  opacity: 80%;
+  position: relative;
+}
+.bottom-image img {
+  width: 100%;
+  height: 450px;
+  position: relative;
+  margin-top: 80px;
+}
+
+.overlay-container {
+  position: absolute;
+  display: flex;
+  width: 40%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Style for the text */
+.overlay-text {
+  text-align: center;
+ font-weight: bold;
+}
+
+/* Style for the button */
+.overlay-button {
+  padding: 10px 20px;
+  background-color: white;
+  color: #033466;
+  font-weight: bold;
+  border: none;
+  border-radius: 50px; /* Use a high value to make the button oval */
+  cursor: pointer;
+  position: absolute;
+}
+
+.overlay-button:hover {
+  background-color: #d0d2d4; /* Change the background color on hover */
+}
+
+.overlay-button2 {
+  padding: 10px 20px;
+  background-color:lightgrey;
+  color: #033466;
+  font-weight: bold;
+  border: none;
+  border-radius: 50px; /* Use a high value to make the button oval */
+  cursor: pointer;
+  position: absolute;
+}
+
+.overlay-button2:hover {
+  background-color: #959698; /* Change the background color on hover */
+}
+
+.blue-bar {
+  background-color: #006DA3;
+  color: #fff;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+}
+
+/* Styling for the text elements */
+.blue-bar-text {
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: bolder;
+}
+
+.blue-gradient-container {
+  background: linear-gradient(to bottom, #73a3bb, #ffffff);
+  height: 50vh; /* Set the height to span the entire viewport */
+  width: 100%; /* Set the width to span the entire viewport */
+}
+
+.blue-gradient-container2 {
+  background: linear-gradient(to bottom, #488fb3 , #f2f4f5);
+  border-radius: 5px;
+
+  height: 20vh; /* Set the height to span the entire viewport */
+  width: 25%; /* Set the width to span the entire viewport */
+
+}
