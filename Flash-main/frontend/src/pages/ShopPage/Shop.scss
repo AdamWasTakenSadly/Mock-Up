@@ -1,62 +1,75 @@
 /* Shop.scss */
 
+/* Shop.scss */
+
 /* Styles for the product grid */
-.view-products {
-    display: flex;
-    justify-content: center;
-    max-width: 80%;
-    margin: 0 auto;
-    flex-wrap: wrap; /* Add this line to wrap the content when it overflows */
-  }
-  
-  /* Styles for each product card */
-  .product-card {
-    margin: 10px;
-    width: 300px;
-  }
-  
-  /* Styles for the "Load More" button */
-  .load-more-button {
-    display: flex;
-    justify-content: center;
-    margin: 20px 0;
-    max-height: 50px;
-    width: 100%; /* Add this line to ensure the button takes the full width */
-  }
-  
-  /* Styles for the MDBBtn component with className "btn-mdb" */
-  .btn-mdb {
-    /* Add any styles specific to the MDBBtn component here */
-    
-    font-size: 14px;
-    padding: 10px 20px;
-    color: white;
-  font-family: 'Montserrat';
-  background-image: #006DA3;
-  font-size: 18px;
-  width: 170px;
-  height: 50px;
-  padding: 0;
-  border-radius: 40px;
+.allproducts {
   display: flex;
+  flex-direction: column;
   align-items: center;
+}
+
+.view-products {
+  display: flex;
   justify-content: center;
-  }
-  
-  /* Media query for smaller screen sizes */
-  @media (max-width: 768px) {
-    .product-card {
-      width: 80%;
-    }
-  }
-  .carousel .carousel-item {
-    height: 400px;
-  }
-  
-  .carousel-item img {
-    
-      object-fit: cover;
-      top: 0;
-      left: 0;
-      min-height: 500px;
-  }
+  max-width: 80%;
+  width: 100%;
+  flex-wrap: wrap;
+
+  /* Add Flexbox styles to control layout */
+  align-items: flex-start; /* Align items to the top */
+  gap: 20px; /* Gap between items */
+}
+
+/* Styles for each product card */
+
+.topbar {
+  /* Flexbox styles for the grid container */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+/* Styles for the "Load More" button */
+.load-more-button {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  max-height: 50px;
+  width: 100%;
+}
+
+/* Styles for the MDBBtn component with className "btn-mdb" */
+.btn-mdb {
+  /* Add any styles specific to the MDBBtn component here */
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #006da3;
+  color: #fff;
+  border-radius: 40px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+/* Media query for smaller screen sizes */
+
+.carousel .carousel-item {
+  height: 400px;
+  width: 100%;
+}
+
+.carousel-item img {
+  object-fit: cover;
+  top: 0;
+  left: 0;
+  min-height: 500px;
+}
+button {
+  padding: 10px 20px;
+  background-color: #006da3;
+  color: #fff;
+  border-radius: 40px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
