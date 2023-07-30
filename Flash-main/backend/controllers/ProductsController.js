@@ -250,6 +250,8 @@ const getCartProducts = async (req, res) => {
           productID: product._id,
           productImage: product.image,
           productPrice: product.price,
+          quantity: cartItem.quantity,
+
         };
       }
       return null;
