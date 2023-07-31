@@ -114,29 +114,35 @@ useEffect(() => {
     
   return (
      
-<div>
-<div
+<div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000 }}>
+  <div
+    className="promo-bar"
     style={{
-      backgroundColor: "#006DA3", // Blue color
+      backgroundColor: "#006DA3",
       color: "white",
       padding: "5px 0 10px 0",
       textAlign: "center",
       fontFamily: "Montserrat",
       fontSize: "15px",
       height: "30px",
-
     }}
   >
     Get 10% off your First Order
   </div>
+
   <Navbar
-      className="nav"
-      expand="lg"
-      style={{
-        backgroundImage: "linear-gradient(to bottom, #D8E7F7, #FFFFFF)",
-        boxShadow: "none",
-      }}
-    >
+    className="nav"
+    expand="lg"
+    style={{
+      backgroundImage: "linear-gradient(to bottom, #D8E7F7, #FFFFFF)",
+      boxShadow: "none",
+      height:"130px"
+     
+    }}
+  >
+    
+
+  
       <Container fluid>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
@@ -156,9 +162,11 @@ useEffect(() => {
   <Nav.Link  href={""} style={{   color:'#006DA3',fontSize:'24px',marginLeft:"15px",marginTop:"40px",
     fontFamily: 'Montserrat'}}> Contact</Nav.Link>
           </Nav>
-          <Navbar.Brand href={"/"} className="mx-auto">
-  <img width="60%" src="/swan.png" alt="Logo" />
-</Navbar.Brand>
+  <Navbar.Brand href={"/"} style={{ position: "fixed", justifyContent: "center", marginLeft:"45%", marginTop:"10px" }}>
+    <img width="60%" src="/swan.png" alt="Logo" />
+  </Navbar.Brand>
+
+
 
 
           <Nav.Link
@@ -176,7 +184,7 @@ useEffect(() => {
               alignItems: "center",
               justifyContent: "center",
               marginLeft: "120px",
-              marginTop: "40px",
+              marginTop: "20px",
             }}
           >
             Shop Now
@@ -191,7 +199,7 @@ useEffect(() => {
               borderRadius: "40px",
               marginLeft: "25px",
               padding: "13px 0px 0px 16px",
-              marginTop: "40px",
+              marginTop: "20px",
             }}
           >
             <img width="60%" src="/search.png" alt="Search" />
@@ -206,11 +214,11 @@ useEffect(() => {
                 height: "50px",
                 borderRadius: "40px",
                 marginLeft: "25px",
-                padding: "10px 0px 0px 16px",
-                marginTop: "40px",
+                padding: "5px 0px 0px 10px",
+                marginTop: "20px",
               }}
             >
-              <img width="65%" src="/login.png" alt="Login" />
+              <img width="85%" src="/login2.png" alt="Login" />
             </Nav.Link>
           )}
           
@@ -236,7 +244,7 @@ useEffect(() => {
                   >
                     Shopping Cart
                   </Popover.Header>
-                  <Popover.Body style={{ minWidth: "300px", padding: "10px" }}>
+                  <Popover.Body style={{ minWidth: "300px", padding: "10px", position: "relative" }}>
   {cartProducts.length === 0 ? (
     <p>No items in the cart.</p>
   ) : (
@@ -247,17 +255,20 @@ useEffect(() => {
           <div>
             <p style={{ margin: "0", fontSize: "14px" }}>{product.productName}</p>
             <p style={{ margin: "0", fontSize: "12px", color: "#666" }}>{product.productPrice} LE</p> 
-            <p style={{ margin: "0", fontSize: "14px", color: "#006DA3" }}> x {product.quantity}
-  </p>
+            <p style={{ margin: "0", fontSize: "14px", color: "#006DA3" }}> x {product.quantity}</p>
           </div>
         </li>
       ))}
-         
-                
+      
+      <li style={{ display: "flex", justifyContent: "flex-end", marginBottom: "-10px", marginRight:"35px", }}>
+        <p style={{ margin: "0", fontSize: "16px", fontWeight: "bold" }}>
+          Total: {cartProducts.reduce((acc, product) => acc + (product.productPrice * product.quantity), 0)} LE
+        </p>
+      </li>
     </ul>
   )}
-   
 </Popover.Body>
+
 {cartProducts.length > 0 &&
 <Popover.Header style={{
                       color: "white",
@@ -285,7 +296,7 @@ useEffect(() => {
                   borderRadius: "40px",
                   marginLeft: "25px",
                   padding: "13px 0px 0px 15px",
-                  marginTop: "40px"
+                  marginTop: "20px"
                 }}
               >
                 <img
@@ -307,11 +318,11 @@ useEffect(() => {
                 height: "50px",
                 borderRadius: "40px",
                 marginLeft: "25px",
-                padding: "10px 0px 0px 16px",
-                marginTop: "40px",
+                padding: "10px 0px 0px 14px",
+                marginTop: "20px",
               }}
             >
-              <img width="60%" src="/logout.png" alt="logout" />
+              <img width="70%" src="/logout2.png" alt="logout" />
             </Nav.Link>
           )}
         </Navbar.Collapse>
