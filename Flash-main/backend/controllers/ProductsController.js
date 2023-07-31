@@ -269,7 +269,7 @@ const getCartProducts = async (req, res) => {
 
 const searchProduct = async (req, res) => {
   try {
-    const prefix = req.body.prefix || ''; // Get the search prefix from the query parameter
+    const prefix = req.body.input || ''; // Get the search prefix from the query parameter
     const query = { name: { $regex: `${prefix}`, $options: 'i' } };
     const products = await Product.find(query);
     res.status(200).json(products);
