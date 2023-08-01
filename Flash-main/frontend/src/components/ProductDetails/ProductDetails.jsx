@@ -10,6 +10,8 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import "./productDetails.scss";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 
 import React from "react";
 
@@ -24,10 +26,12 @@ const displayStars = (ratings) => {
     .concat(Array(emptyStars).fill("☆"));
   return stars.join(" ");
 };
+
 const ProductDetails = ({ product }) => {
   const [error, setError] = useState(null);
   const [isInitialRender, setIsInitialRender] = useState(true);
   const [ratings, setRatings] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal open/close
 
   const params = useParams();
   const id = params.id;
@@ -72,11 +76,17 @@ const ProductDetails = ({ product }) => {
       fetchRatings();
     }
   }, []);
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="ProductDetails">
       {/* Card component created directly within the return statement */}
-      <div className="Card">
+      <div className="Card" onClick={openModal}>
         {/* Your Card component JSX here, utilizing the product data */}
         <div className="imgBox">
           <img className="image" src={product.image} alt="" />
@@ -97,6 +107,52 @@ const ProductDetails = ({ product }) => {
           </Typography>
           <div className="price">{product.price} EGP</div>
           <button onClick={() => addCart(product)}>ADD TO CART</button>
+        </div>
+      </div>
+  
+      {/* Bootstrap Modal */}
+      <div
+        className={`modal fade ${isModalOpen ? "show" : ""}`}
+        tabIndex="-1"
+        role="dialog"
+        style={{ display: isModalOpen ? "block" : "none" }}
+      >
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">{product.name}</h5>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+                onClick={closeModal}
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              {/* Display more product details here */}
+              <img className="image" src={product.image} alt="" />
+              <p>Rating: {displayStars(product.rating)}</p>
+              <p>Price: {product.price} EGP</p>
+              {/* Add other product details */}
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-dismiss="modal"
+                onClick={closeModal}
+              >
+                Close
+              </button>
+              {/* Add to cart button in modal */}
+              <button className="btn btn-primary" onClick={() => addCart(product)}>
+                ADD TO CART
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
