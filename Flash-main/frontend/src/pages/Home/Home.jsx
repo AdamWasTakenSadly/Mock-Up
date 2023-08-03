@@ -30,20 +30,20 @@ const Home =() => {
           <img src="cellulitecream.jpg" alt="Right Image 1" style={{height:'700px', opacity:'90%'}}/>
           <img src="darkcircles.jpg" alt="Right Image 2" style={{height:'700px', opacity:'90%'}}/>
           <div class="overlay-container" style={{ top: '700px', left: '650px'}}>
-        <div class="overlay-text" style={{color: '#033466', fontSize:'40px'}}>
+        <div class="overlay-text" style={{color: '#033466', fontSize:'40px',marginTop:"-40%"}}>
         Cellulite Cream
         </div>
         <div class="overlay-text" style={{color: '#033466', fontSize:'20px', width:'380px',marginLeft:"60%"}}>
           (Best Seller)
         </div>
-        <button class="overlay-button" style={{opacity:'70%', top:'100px', left:'150px'}} onClick={shopNow}>Get Now</button>
+        <button class="overlay-button" style={{opacity:'70%', top:'100px', left:'150px',marginTop:"-30%"}} onClick={shopNow}>Get Now</button>
         </div>
 
         <div class="overlay-container" style={{ top: '1350px', left: '730px'}}>
-        <div class="overlay-text" style={{color: '#033466', fontSize:'40px'}}>
+        <div class="overlay-text" style={{color: '#033466', fontSize:'40px',marginTop:"-30%"}}>
         Dark Circles Eye Cream
         </div>
-        <button class="overlay-button" style={{opacity:'70%', top:'70px', left:'80px'}}  onClick={shopNow}>Get Now</button>
+        <button class="overlay-button" style={{opacity:'70%', top:'70px', left:'80px',marginTop:"-20%"}}  onClick={shopNow}>Get Now</button>
         </div>
         </div>
       </div>
