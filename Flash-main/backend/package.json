@@ -32,5 +32,8 @@
     "pdfkit": "^0.13.0",
     "react-local-currency": "^1.0.0",
     "stripe": "^11.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }

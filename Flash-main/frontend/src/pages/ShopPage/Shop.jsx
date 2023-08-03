@@ -83,7 +83,7 @@ const Shop = () => {
         </div>
         {visibleProducts < (products && products.length) && (
           <div className="load-more-button">
-            <button onClick={loadMoreProducts}>Load More</button>
+            <button class ="btn-mdb" onClick={loadMoreProducts}>Load More</button>
           </div>
         )}
       </div>

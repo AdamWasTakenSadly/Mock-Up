@@ -11,39 +11,25 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import "./productDetails.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Rating from '@mui/material/Rating';
+import { Modal } from "react-bootstrap"; // Import the Modal component from react-bootstrap
 
 
 import React from "react";
 
-const displayStars = (ratings) => {
-  const starIcon = "⭐"; // You can replace this with an actual star icon if you have one
-  const fullStars = Math.floor(ratings);
-  const halfStars = ratings - fullStars >= 0.5 ? 1 : 0;
-  const emptyStars = 5 - fullStars - halfStars;
-  const stars = Array(fullStars)
-    .fill(starIcon)
-    .concat(halfStars ? [`${starIcon}½`] : [])
-    .concat(Array(emptyStars).fill("☆"));
-  return stars.join(" ");
-};
+
 
 const ProductDetails = ({ product }) => {
   const [error, setError] = useState(null);
   const [isInitialRender, setIsInitialRender] = useState(true);
   const [ratings, setRatings] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal open/close
-
+  const [isModalOpen2, setIsModalOpen2] = useState(false); // State for modal open/close
   const params = useParams();
   const id = params.id;
+ 
 
-  const fetchRatings = async () => {
-    // You can add code here to fetch ratings for the product (if needed)
-    // const response = await fetch('/products/' + product._id + '/ratings/guest');
-    // const json = await response.json();
-    // if (response.ok) {
-    //   setRatings(json);
-    // }
-  };
+  
 
   const addCart = async (product) => {
     try {
@@ -59,10 +45,18 @@ const ProductDetails = ({ product }) => {
       if (response.ok) {
         const data = await response.json();
         console.log("Product added to cart:", data);
+        setIsModalOpen(false);
+        setIsModalOpen2(true);
+        
+        
+      
         // Implement logic to update cart state or show success message
       } else {
         console.error("Failed to add product to cart:", response.statusText);
         // Implement logic to show error message
+        if(response.statusText == "Unauthorized"){
+          window.location.href = '/login'
+        }
       }
     } catch (error) {
       console.error("Error adding product to cart:", error);
@@ -73,7 +67,7 @@ const ProductDetails = ({ product }) => {
   useEffect(() => {
     if (isInitialRender) {
       setIsInitialRender(false);
-      fetchRatings();
+      
     }
   }, []);
   const closeModal = () => {
@@ -82,9 +76,17 @@ const ProductDetails = ({ product }) => {
   const openModal = () => {
     setIsModalOpen(true);
   };
+  const closeModal2 = () => {
+    setIsModalOpen2(false);
+  };
+  const openModal2 = () => {
+    setIsModalOpen2(true);
+  };
 
   return (
+
     <div className="ProductDetails">
+      
       {/* Card component created directly within the return statement */}
       <div className="Card" onClick={openModal}>
         {/* Your Card component JSX here, utilizing the product data */}
@@ -92,6 +94,7 @@ const ProductDetails = ({ product }) => {
           <img className="image" src={product.image} alt="" />
         </div>
         <div className="contentBox">
+        
           <h2>{product.name}</h2>
           <Typography
             variant="h7"
@@ -103,7 +106,20 @@ const ProductDetails = ({ product }) => {
               color: "#006DA3",
             }}
           >
-            {displayStars(product.rating)}
+            <Rating
+            name="simple-controlled"
+            value={product.rating}
+            precision={0.5}
+            readOnly // Make it read-only, not clickable
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color:"#006DA3",
+             
+              
+            }}
+          />
           </Typography>
           <div className="price">{product.price} EGP</div>
           <button onClick={() => addCart(product)}>ADD TO CART</button>
@@ -111,50 +127,61 @@ const ProductDetails = ({ product }) => {
       </div>
   
       {/* Bootstrap Modal */}
-      <div
-        className={`modal fade ${isModalOpen ? "show" : ""}`}
-        tabIndex="-1"
-        role="dialog"
-        style={{ display: isModalOpen ? "block" : "none" }}
-      >
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">{product.name}</h5>
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-                onClick={closeModal}
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
+     {/* React Bootstrap Modal */}
+     <Modal show={isModalOpen} onHide={closeModal} dialogClassName="custom-modal">
+      <Modal.Header closeButton>
+        
+      </Modal.Header>
+      <Modal.Body>
+        {/* Split the modal body into left and right content using Bootstrap grid */}
+        <div className="container">
+          <div className="row">
+            {/* Left side (image) */}
+            <div className="col-xs-12 col-md-6">
+              <img className="image" src={product.image} alt="" style={{ width: '100%' }} />
             </div>
-            <div className="modal-body">
-              {/* Display more product details here */}
-              <img className="image" src={product.image} alt="" />
-              <p>Rating: {displayStars(product.rating)}</p>
-              <p>Price: {product.price} EGP</p>
-              {/* Add other product details */}
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-dismiss="modal"
-                onClick={closeModal}
-              >
-                Close
-              </button>
-              {/* Add to cart button in modal */}
-              <button className="btn btn-primary" onClick={() => addCart(product)}>
-                ADD TO CART
-              </button>
-            </div>
+            {/* Right side (other details) */}
+            <div className="col-xs-12 col-md-6" style={{ textAlign: 'center' }}>
+  <h2 style={{ color: '#006DA3', marginBottom: '10px' }}>{product.name}</h2>
+  <Rating
+    name="simple-controlled"
+    value={product.rating}
+    precision={0.5}
+    readOnly // Make it read-only, not clickable
+    style={{
+      fontSize: '30px',
+      marginBottom: '10px',
+      color:'#006DA3'
+    }}
+  />
+  <div className="description" style={{ wordWrap: 'break-word', marginBottom: '20px' }}>
+    {product.description}
+  </div>
+  <h3 className="price">
+   Price: {product.price} EGP
+  </h3>
+</div>
+
           </div>
         </div>
-      </div>
+      </Modal.Body>
+      <Modal.Footer>
+        {/* Add to cart button in modal */}
+        <Button className="addtocart" onClick={() => addCart(product)}>
+          ADD TO CART
+        </Button>
+        <Button variant="secondary" onClick={closeModal}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
+
+    <Modal show={isModalOpen2} onHide={closeModal2} dialogClassName="custom-modal">
+      <Modal.Body>
+        <h4>Product Added To Cart</h4>
+      </Modal.Body>
+    </Modal>
+
     </div>
   );
 };

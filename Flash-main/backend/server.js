@@ -51,6 +51,8 @@ mongoose
   })
   .catch((error) => {
     console.log(error);
+    console.log("can not connect to database");
+
   });
 
 //homepage routes

@@ -5,6 +5,7 @@
 /* Styles for the product grid */
 .allproducts {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: column;
   align-items: center;
 }
@@ -42,13 +43,19 @@
 /* Styles for the MDBBtn component with className "btn-mdb" */
 .btn-mdb {
   /* Add any styles specific to the MDBBtn component here */
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #006da3;
+  display: flex;
+  cursor: pointer;
+  font-family: 'Montserrat';
+  padding: 24px 35px;
+  background-image: linear-gradient(to bottom, #0099D3, #006DA3);
   color: #fff;
   border-radius: 40px;
+  border-width: 0;
   margin-top: 10px;
   cursor: pointer;
+  font-weight: 0;
+  margin: 10px auto;
+  align-items: center;
 }
 
 /* Media query for smaller screen sizes */
@@ -64,12 +71,4 @@
   left: 0;
   min-height: 500px;
 }
-button {
-  padding: 10px 20px;
-  background-color: #006da3;
-  color: #fff;
-  border-radius: 40px;
-  margin-top: 10px;
-  cursor: pointer;
-  font-weight: 600;
-}
+
