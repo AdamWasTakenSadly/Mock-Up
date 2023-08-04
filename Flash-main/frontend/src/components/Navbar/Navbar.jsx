@@ -10,6 +10,9 @@ import Cookie from "js-cookie";
 import Popup from "../../components/Popup/Popup";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
+import {Confirm} from 'react-admin';
+
+
 const handleLogOut = () => {
   const response = fetch("/login/logout");
   console.log(response.json);
@@ -22,6 +25,7 @@ function Navbar1() {
   const [userId, setUserId] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(null);
+  const [isLogOutConfirmationOpen,setIsLogOutConfirmationOpen] = useState(false);
 
   const [search, setSearch] = useState("");
 
@@ -519,7 +523,7 @@ function Navbar1() {
 
             {isLoggedIn && (
               <Nav.Link
-                onClick={logout}
+                onClick={()=>{setIsLogOutConfirmationOpen(true)}}
                 style={{
                   backgroundImage:
                     "linear-gradient(to bottom, #0099D3, #006DA3)",
@@ -537,6 +541,17 @@ function Navbar1() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
+
+      <Confirm  
+    isOpen={isLogOutConfirmationOpen} 
+    title={'LogOut'}
+    content="Are you sure you want to log out?"
+    onConfirm={logout}
+    onClose={()=>{setIsLogOutConfirmationOpen(false)}}
+    confirm={"Log out"}
+    cancel={"Cancel"}
+    >
+  </Confirm>
     </div>
   );
 }
