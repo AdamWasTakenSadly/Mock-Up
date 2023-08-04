@@ -80,6 +80,8 @@ function Navbar1() {
       if (response.ok) {
         const data = await response.json();
         console.log("Product removed from cart:", data);
+        window.location.reload();
+
       } else {
         console.error(
           "Failed to remove product from cart:",
@@ -91,6 +93,33 @@ function Navbar1() {
     }
   };
 
+  const addCart = async (product) => {
+    try {
+      console.log("product is printed here");
+      console.log(product);
+      const response = await fetch("/products/buyProduct", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: product.productID }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Product removed from cart:", data);
+        window.location.reload();
+
+      } else {
+        console.error(
+          "Failed to remove product from cart:",
+          response.statusText
+        );
+      }
+    } catch (error) {
+      console.error("Error removing product from cart:", error);
+    }
+  };
   useEffect(() => {
     // Fetch the user's cart products when the popover is opened
     if (isCartPopoverOpen) {
@@ -352,16 +381,7 @@ function Navbar1() {
                                 >
                                   {product.productPrice} LE
                                 </p>
-                                <p
-                                  style={{
-                                    margin: "0",
-                                    fontSize: "14px",
-                                    color: "#006DA3",
-                                  }}
-                                >
-                                  {" "}
-                                  x {product.quantity}
-                                </p>
+                               
                               </div>
                               <div
                                 className="removeButton"
@@ -373,37 +393,49 @@ function Navbar1() {
                                   marginRight: "40px",
                                 }}
                               >
-                                {/*} <button
-                                  onClick={() => removeCart(product)}
-                                  href=""
-                                  style={{
-                                    borderColor: "#FFFFFF",
-                                    width: "40px",
-                                    height: "30px",
-                                    borderRadius: "40px",
-                                    // marginLeft: "15px",
-                                    padding: "4px 8px 0px 8px",
-                                    marginTop: "30px",
-                                    color: "#FFFFFF",
-                                  }}
-                                >*/}
-                                <img
-                                  style={{
-                                    width: "40px",
-                                    height: "30px",
-                                    borderRadius: "40px",
-                                    marginLeft: "30px",
-                                    padding: "4px 8px 0px 8px",
-                                    marginTop: "30px",
-                                    cursor: "pointer",
-                                    //width: "35px !important",
-                                    //height: "20px",
-                                  }}
-                                  width="100%"
-                                  src="/remove3.png"
-                                  alt="Remove"
-                                  onClick={() => removeCart(product)}
-                                />
+                                                            <span
+                                                              onClick={() => addCart(product)}
+
+  style={{
+    display: "inline-flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "20px",
+    height: "20px",
+    borderRadius: "50%",
+    border: "2px solid #006DA3",
+    backgroundColor: "transparent",
+    color: "#006DA3",
+    fontSize: "14px",
+    cursor: "pointer",
+    marginRight: "5px",
+    fontWeight: "bold"
+  }}
+>
+  +
+</span>
+
+  <span style={{ fontSize: "14px", color: "#006DA3" }}>{product.quantity}</span>
+  <span
+  onClick={() => removeCart(product)}
+  style={{
+    display: "inline-flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "20px",
+    height: "20px",
+    borderRadius: "50%",
+    border: "2px solid #006DA3",
+    backgroundColor: "transparent",
+    color: "#006DA3",
+    fontSize: "14px",
+    cursor: "pointer",
+    marginLeft: "5px",
+    fontWeight: "bold"
+  }}
+  >
+    -
+  </span>
                               </div>
                             </li>
                           ))}
