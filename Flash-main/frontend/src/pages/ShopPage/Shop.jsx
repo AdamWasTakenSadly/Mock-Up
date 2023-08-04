@@ -4,6 +4,8 @@ import ProductDetails from "../../components/ProductDetails/ProductDetails"; // 
 import Cookie from "js-cookie";
 import "./Shop.scss";
 import { MDBBtn } from "mdb-react-ui-kit"; // Import the MDBBtn component
+import Form from 'react-bootstrap/Form';
+import Nav from 'react-bootstrap/Nav';
 import { Carousel } from "react-bootstrap";
 
 const Shop = () => {
@@ -13,6 +15,7 @@ const Shop = () => {
   const [error, setError] = useState(null);
   const [products, setProducts] = useState(null);
   const [visibleProducts, setVisibleProducts] = useState(16);
+  const [userSearchInput,setUserSearchInput]=useState('');
 
   useEffect(() => {
     fetchProducts();
@@ -53,6 +56,12 @@ const Shop = () => {
     setVisibleProducts((prev) => prev + 16); // Load 16 more products each time
   };
 
+  const handleUserSearchInputChange=(e)=>{
+    setUserSearchInput(e.target.value);
+    console.log(...userSearchInput)
+  }
+
+
   return (
     <div className="allproducts">
       <div className="view-products">
@@ -73,6 +82,34 @@ const Shop = () => {
           </Carousel.Item>
         </Carousel>
         <h2>Our Products</h2>
+        <div>
+        <Form className="d-flex">
+            <input
+              type="text"
+              placeholder="  Search our products"
+              className="me-2"
+              aria-label="Search"
+              onChange={(e)=>handleUserSearchInputChange(e)}
+              value={userSearchInput}
+              style={{ height:'50px',width:'500px',borderRadius:'40px',marginLeft: "175px", padding: "13px 0px 0px 16px",borderColor:'black', float:"right"}}
+             
+            />
+              <Nav.Link
+              href={`/shop?search=${(userSearchInput)}`}
+            style={{
+              backgroundImage: "linear-gradient(to bottom, #0099D3, #006DA3)",
+              width: "60px",
+              height: "50px",
+              borderRadius: "40px",
+              marginLeft: "25px",
+             padding: "13px 0px 0px 16px",
+              marginRight:"-80%"
+            }}
+          >
+            <img width="60%" src="/search.png" alt="Search" />
+          </Nav.Link>
+          </Form>
+          </div>
         <div className="topbar">
           {products &&
             products
