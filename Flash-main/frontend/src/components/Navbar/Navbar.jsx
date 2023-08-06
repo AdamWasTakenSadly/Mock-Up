@@ -111,17 +111,17 @@ function Navbar1() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Product removed from cart:", data);
+        console.log("Product added to cart:", data);
         window.location.reload();
 
       } else {
         console.error(
-          "Failed to remove product from cart:",
+          "Failed to add product to cart:",
           response.statusText
         );
       }
     } catch (error) {
-      console.error("Error removing product from cart:", error);
+      console.error("Error adding product to cart:", error);
     }
   };
   useEffect(() => {
@@ -397,9 +397,9 @@ function Navbar1() {
                                   marginRight: "40px",
                                 }}
                               >
-                                                            <span
-                                                              onClick={() => addCart(product)}
-
+                                                       
+<span
+  onClick={() => removeCart(product)}
   style={{
     display: "inline-flex",
     justifyContent: "center",
@@ -415,13 +415,13 @@ function Navbar1() {
     marginRight: "5px",
     fontWeight: "bold"
   }}
->
-  +
-</span>
-
+  >
+    -
+  </span>
   <span style={{ fontSize: "14px", color: "#006DA3" }}>{product.quantity}</span>
   <span
-  onClick={() => removeCart(product)}
+                                                              onClick={() => addCart(product)}
+
   style={{
     display: "inline-flex",
     justifyContent: "center",
@@ -437,9 +437,10 @@ function Navbar1() {
     marginLeft: "5px",
     fontWeight: "bold"
   }}
-  >
-    -
-  </span>
+>
+  +
+</span>
+  
                               </div>
                             </li>
                           ))}
