@@ -289,20 +289,7 @@ function Navbar1() {
               Shop Now
             </Nav.Link>
 
-            <Nav.Link
-              href=""
-              style={{
-                backgroundImage: "linear-gradient(to bottom, #0099D3, #006DA3)",
-                width: "60px",
-                height: "50px",
-                borderRadius: "40px",
-                marginLeft: "25px",
-                padding: "13px 0px 0px 16px",
-                marginTop: "20px",
-              }}
-            >
-              <img width="60%" src="/search.png" alt="Search" />
-            </Nav.Link>
+         
             {/* If the user is a guest, show the login icon */}
             {!isLoggedIn && (
               <Nav.Link

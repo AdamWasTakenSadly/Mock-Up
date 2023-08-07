@@ -50,7 +50,7 @@ const Home = () => {
           />
           <div
             class="overlay-container"
-            style={{ top: "700px", left: "650px" }}
+            style={{ top: "700px", left: "800px" }}
           >
             <div
               class="overlay-text"
@@ -64,7 +64,7 @@ const Home = () => {
                 color: "#033466",
                 fontSize: "20px",
                 width: "380px",
-                marginLeft: "60%",
+                marginLeft: "40%",
               }}
             >
               (Best Seller)
@@ -74,7 +74,7 @@ const Home = () => {
               style={{
                 opacity: "70%",
                 top: "100px",
-                left: "150px",
+                left: "210px",
                 marginTop: "-30%",
               }}
               onClick={shopNow}
@@ -89,7 +89,7 @@ const Home = () => {
           >
             <div
               class="overlay-text"
-              style={{ color: "#033466", fontSize: "40px", marginTop: "-30%" }}
+              style={{ color: "#033466", fontSize: "40px", marginTop: "-30%" ,marginLeft:"30%"}}
             >
               Dark Circles Eye Cream
             </div>
@@ -100,6 +100,7 @@ const Home = () => {
                 top: "70px",
                 left: "80px",
                 marginTop: "-20%",
+                marginLeft:"23%"
               }}
               onClick={shopNow}
             >
@@ -124,19 +125,19 @@ const Home = () => {
           >
             <div
               class="overlay-text"
-              style={{ color: "#1E6BB7", fontSize: "60px" }}
+              style={{ color: "#1E6BB7", fontSize: "60px", marginLeft:"20%"}}
             >
               Joy Bundles!
             </div>
             <div
               class="overlay-text"
-              style={{ color: "#FFDC8B", fontSize: "25px", width: "420px" }}
+              style={{ color: "#FFDC8B", fontSize: "25px", width: "420px",marginLeft:"20%" }}
             >
               Shop our ready made kits, the perfect gift for your loved ones.
             </div>
             <button
               class="overlay-button2"
-              style={{ top: "185px", left: "110px" }}
+              style={{ top: "185px", left: "110px",marginLeft:"20%" }}
               onClick={shopNow}
             >
               Get Now
@@ -174,8 +175,8 @@ const Home = () => {
             fontSize: "20px",
             fontWeight: "bold",
             position: "relative",
-            top: "110px",
-            left: "850px",
+            top: "115px",
+            left: "950px",
             textDecoration: "underline",
           }}
         >
@@ -225,7 +226,7 @@ const Home = () => {
         </div>
         <div
           class="blue-gradient-container2"
-          style={{ position: "relative", bottom: "52px", left: "850px" }}
+          style={{ position: "relative", bottom: "86px", left: "950px" }}
         >
           <Rating
             name="simple-controlled"

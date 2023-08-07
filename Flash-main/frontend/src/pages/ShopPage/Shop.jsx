@@ -64,24 +64,25 @@ const Shop = () => {
 
   return (
     <div className="allproducts">
+      <div class = "empty-space"></div>
       <div className="view-products">
         <Carousel className="custom-carousel">
           <Carousel.Item>
             <img
               className="d-block w-100"
-              src="https://cdn.pixabay.com/photo/2016/08/22/16/23/massage-therapy-1612308_1280.jpg"
+              src="https://cdn.pixabay.com/photo/2017/05/30/19/42/skincare-2357980_1280.jpg"
               alt="Image 1"
             />
           </Carousel.Item>
           <Carousel.Item>
             <img
               className="d-block w-100"
-              src="https://cdn.pixabay.com/photo/2016/08/22/16/23/massage-therapy-1612308_1280.jpg"
+              src="https://cdn.pixabay.com/photo/2017/08/09/09/06/scrub-2613852_1280.jpg"
               alt="Image 2"
             />
           </Carousel.Item>
         </Carousel>
-        <h2>Our Products</h2>
+      <h2>All products</h2>
         <div>
         <Form className="d-flex">
             <input
@@ -91,7 +92,7 @@ const Shop = () => {
               aria-label="Search"
               onChange={(e)=>handleUserSearchInputChange(e)}
               value={userSearchInput}
-              style={{ height:'50px',width:'500px',borderRadius:'40px',marginLeft: "175px", padding: "13px 0px 0px 16px",borderColor:'black', float:"right"}}
+              style={{ height:'60px',width:'800px',borderRadius:'40px',marginLeft: "175px", padding: "0px 0px 0px 16px",borderColor:'black', float:"right",justifyContent:"center"}}
              
             />
               <Nav.Link
@@ -99,7 +100,7 @@ const Shop = () => {
             style={{
               backgroundImage: "linear-gradient(to bottom, #0099D3, #006DA3)",
               width: "60px",
-              height: "50px",
+              height: "60px",
               borderRadius: "40px",
               marginLeft: "25px",
              padding: "13px 0px 0px 16px",

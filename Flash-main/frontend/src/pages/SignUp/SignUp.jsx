@@ -1,6 +1,7 @@
 
 import React from 'react'
 import { useState,useEffect } from 'react';
+import "./signUp.scss";
 
   import {
     MDBBtn,
@@ -67,7 +68,7 @@ const handleEmailChange=(event)=>{
               else{
                 console.log(data);
                 // Handle data
-                window.location.href="/login"
+                window.location.href="/"
               }
              })
              .catch((err) => {
@@ -116,7 +117,7 @@ const github=()=>{
                 <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Subscribe to our newsletter' />
               </div>
 
-              <MDBBtn className="mb-4 w-100 gradient-custom-2" size='lg' onClick={handleSignUp}>Sign Up</MDBBtn>
+              <button className="sign-up"  onClick={handleSignUp}>Sign Up</button>
               {error && <p style={{color:"#8B0000"}}>{error}</p>}
               <div className="text-center">
 
@@ -125,21 +126,21 @@ const github=()=>{
                
                
                
-                <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#006DA3' }}  onClick={facebook} >
+                <button tag='a' color='none' className='mx-3' style={{ color: '#006DA3',border:"0",backgroundColor:"white"}}  onClick={facebook} >
                 <i class="bi bi-facebook"></i>
-                </MDBBtn>
+                </button>
 
-                <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#006DA3' }} onClick={google}>
+                <button tag='a' color='none' className='mx-3' style={{ color: '#006DA3',border:"0",backgroundColor:"white"}} onClick={google}>
                 <i class="bi bi-google"></i>
-                </MDBBtn>
+                </button>
 
-                <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#006DA3' }} onClick={twitter}>
+                <button tag='a' color='none' className='mx-3' style={{ color: '#006DA3',border:"0",backgroundColor:"white"}} onClick={twitter}>
                 <i class="bi bi-twitter"></i>
-                </MDBBtn>
+                </button>
 
-                <MDBBtn tag='a' color='none' className='mx-3' style={{ color: '#006DA3' }} onClick={github}>
+                <button tag='a' color='none' className='mx-3' style={{ color: '#006DA3',border:"0",backgroundColor:"white"}} onClick={github}>
                 <i class="bi bi-github"></i>
-                </MDBBtn>
+                </button>
 
               </div>
 

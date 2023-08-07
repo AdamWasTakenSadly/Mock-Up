@@ -1,6 +1,7 @@
 
 import React from 'react'
 import { useState,useEffect } from 'react';
+import "./login.scss";
 
  import {
   MDBBtn,
@@ -124,7 +125,7 @@ const Login =()=>{
                 <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Subscribe to our newsletter' />
               </div>
 
-              <MDBBtn className="mb-4 w-100 gradient-custom-2" size='lg' onClick={handleLogin}>Log In</MDBBtn>
+              <button className="login" size='lg' onClick={handleLogin}>Log In</button>
               {error && <p style={{color:"#8B0000"}}>{error}</p>}
               <div className="text-center">
 
