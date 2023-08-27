@@ -5,11 +5,22 @@ const Schema = mongoose.Schema;
 const orderSchema = new Schema({
   orderID: {
     type: String,
-    required: true,
   },
   orderUser: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User', // Reference the User model
+    required: true,
+  },
+  orderFirstName: {
+    type: String,
+    required: true,
+  },
+  orderLastName: {
+    type: String,
+    required: true,
+  },
+  orderPhone: {
+    type: String,
     required: true,
   },
   orderProducts: [
@@ -31,7 +42,6 @@ const orderSchema = new Schema({
   },
   orderStatus: {
     type: String,
-    required: true,
   },
   totalAmount: {
     type: Number,
@@ -39,12 +49,15 @@ const orderSchema = new Schema({
   },
   paymentType: {
     type: String,
-    required: true,
   },
   address: {
     type: String,
     required: true,
   },
+  additionalInfo: {
+    type: String,
+    required: true,
+  }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Order', orderSchema);

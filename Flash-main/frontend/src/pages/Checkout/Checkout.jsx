@@ -7,6 +7,17 @@ import { Link } from 'react-router-dom';
 
 
  function CheckoutPage(props) {
+  //order details
+    const [firstName,setFirstName] =useState("")
+    const [lastName,setLastName] =useState("")
+    const [phone,setPhone] =useState("")
+    const [products,setProducts] =useState([])
+    const [totalAmount,setTotalAmount] =useState("")
+    const [address,setAddress] =useState("")
+    const [additionalInfo,setAdditionalInfo] =useState("")
+
+
+
     const [cartProducts, setCartProducts] = useState([]);
     const [mapsLink, setMapsLink] = useState('');
     const [userLocation, setUserLocation] = useState({
@@ -30,13 +41,79 @@ import { Link } from 'react-router-dom';
     } catch (error) {
       console.error("Error fetching cart products:", error);
     }
-    
-    
       
   };
-  
+
+  const deleteUserCart = async () => {
+    try {
+      const response = await fetch(`/products/deleteCart`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        console.log('User cart deleted successfully');
+      } else {
+        console.error('Failed to delete user cart');
+      }
+    } catch (error) {
+      console.error('Error deleting user cart:', error);
+    }
+  };
+
+  const getUserNumber = async () => {
+    try {
+      const response = await fetch("/users/getUserNumber");
+      if (response.ok) {
+        const unumber = await response.json();
+        setPhone(unumber);
+        console.log(unumber);
+      }
+    } catch (error) {
+      console.error("Error fetching user number:", error);
+    }
+      
+  };
+
+  const getUserAddress = async () => {
+    try {
+      const response = await fetch("/users/getUserAddress");
+      if (response.ok) {
+        const uadd = await response.json();
+        setAddress(uadd);
+        console.log(uadd);
+      }
+    } catch (error) {
+      console.error("Error fetching user address:", error);
+    }
+      
+  };
+
+
+  const handleFnChange=(event)=>{
+    setFirstName(event.target.value)
+}
+
+const handleLnChange=(event)=>{
+  setLastName(event.target.value)
+}
+
+const handlePhoneChange=(event)=>{
+  setPhone(event.target.value)
+  }
+
+const handleAddressChange=(event)=>{
+  setAddress(event.target.value)
+}
+
+const handleInfoChange=(event)=>{
+  setAdditionalInfo(event.target.value)
+}
+
+
   useEffect(() => {
     getCartProducts();
+    getUserNumber();
+    getUserAddress();
 
     // Get user's location
     if ('geolocation' in navigator) {
@@ -63,7 +140,74 @@ import { Link } from 'react-router-dom';
       }
     }, []);
   
+    useEffect(() => {
+      // Calculate the total amount based on cart products
+      const calculatedTotalAmount = cartProducts.reduce(
+        (acc, cartItem) => acc + cartItem.productPrice * cartItem.quantity,
+        0
+      );
+  
+      // Map cart products to orderProducts format
+      const mappedOrderProducts = cartProducts.map((cartItem) => ({
+        product: cartItem.productID,
+        quantity: cartItem.quantity,
+      }));
 
+      setProducts(mappedOrderProducts);
+      setTotalAmount(calculatedTotalAmount);
+
+    }, [cartProducts]);
+
+    const addOrder = async () => {
+      try {
+        const response = await fetch("/orders/createOrder", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            orderFirstName:firstName,
+            orderLastName:lastName,
+            orderPhone:phone,
+            orderProducts:products,
+            totalAmount:totalAmount,
+            address:address,
+            additionalInfo:additionalInfo
+        }),
+        });
+    
+        if (response.ok) {
+          const newOrder = await response.json();
+          console.log(newOrder);
+
+          // Show a pop-up message to the user
+      window.alert("Your order has been created!");
+
+      // Call the deleteCart function to delete the user's cart
+      deleteUserCart();
+      window.location.href = "/"; // Navigate to the home page
+
+
+
+
+          return newOrder;
+        } else {
+          throw new Error("Failed to add order");
+        }
+      } catch (error) {
+        throw error;
+      }
+    };
+
+    const handleMapClick = (mapProps, map, clickEvent) => {
+      const newLocation = {
+        lat: clickEvent.latLng.lat(),
+        lng: clickEvent.latLng.lng(),
+      };
+      const link = `https://www.google.com/maps?q=${newLocation.lat},${newLocation.lng}`;
+      setMapsLink(link);
+      setUserLocation(newLocation);
+    };
     
   return (
     <div style={{marginTop:"10%"}}>
@@ -79,7 +223,7 @@ import { Link } from 'react-router-dom';
       <MDBCol md="8" className="mb-4">
 <MDBCard className="mb-4"  style={{  border: "none", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.1)"}} >
               <MDBCardBody>
-                <p className="text-uppercase fw-bold mb-3 text-font" style={{color: "#4e4e4e", }}>Locate Me</p>
+                <p className="text-uppercase fw-bold mb-3 text-font" style={{color: "#006DA3", }}>Locate Me</p>
                 <MDBRow>    
 <div style={{ height: '300px' }}>
 {userLocation.lat && userLocation.lng ? (
@@ -90,7 +234,7 @@ import { Link } from 'react-router-dom';
   initialCenter={{
     lat: userLocation.lat,
     lng: userLocation.lng,
-  }}>
+  }} onClick={handleMapClick}>
   <Marker position={{ lat: userLocation.lat,
               lng: userLocation.lng}} />
 </Map>
@@ -99,9 +243,9 @@ import { Link } from 'react-router-dom';
   )}
 </div>
 {userLocation.lat && userLocation.lng && (
-  <div>
+  <div style={{marginTop:"30px"}}>
  <p>
-      <Link href={mapsLink} onClick = {() => openInNewTab(mapsLink)}>{mapsLink}</Link>
+ Please note that, incase of inaccuracy, you can click on your accurate location on the map to remark it.
 
     </p>   
   </div>
@@ -118,13 +262,13 @@ import { Link } from 'react-router-dom';
             <MDBAccordion className="card mb-4 " style={{  border: "none", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.1)"}}>
               <MDBAccordionItem collapseId={1} className="border-0" headerTitle='Promo Code or Vouchers'>
               
-                <MDBInput label='Enter code' type='text' />
+                <MDBInput type='text' />
               </MDBAccordionItem>
             </MDBAccordion>
 
             <MDBCard className="mb-4"  style={{  border: "none", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.1)"}} >
               <MDBCardBody>
-                <p className="text-uppercase fw-bold mb-3 text-font" style={{color: "#4e4e4e", }}>Email address</p>
+                <p className="text-uppercase fw-bold mb-3 text-font" style={{color: "#006DA3", }}>Email address</p>
                 <MDBRow>
                   
                 </MDBRow>
@@ -134,7 +278,7 @@ import { Link } from 'react-router-dom';
           <MDBCol md="4" className="mb-4 position-statics">
             <MDBCard className="mb-4"  style={{  border: "none", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.1)", marginTop:"-115%"}}>
               <MDBCardHeader className="py-3" style={{backgroundColor:"white"}}>
-                <MDBTypography tag="h5" className="mb-0 text-uppercase fw-bold text-font" style={{color: "#4e4e4e", }}>
+                <MDBTypography tag="h5" className="mb-0 text-uppercase fw-bold text-font" style={{color: "#006DA3", }}>
                Summary
                               <span className="float-end mt-1" style={{ fontSize: '13px' }}> {cartProducts.reduce(
                                 (acc, product) =>
@@ -191,32 +335,32 @@ import { Link } from 'react-router-dom';
             <MDBCard className="mb-4" style={{  border: "none", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.1)",  marginTop: "-13%" }}>
               <MDBCardHeader className="py-3" style={{backgroundColor:"white"}}>
                 
-                <MDBTypography tag="h5" className="mb-0 text-font text-uppercase" style={{color: "#4e4e4e"}}>Delivery address</MDBTypography>
+                <MDBTypography tag="h5" className="mb-0 text-font text-uppercase" style={{color: "#006DA3"}}>Delivery address</MDBTypography>
               </MDBCardHeader>
               <MDBCardBody>
                 <form>
                   <MDBRow className="mb-4">
                     <MDBCol>
                         <label> First Name
-                      <MDBInput  type='text'  />
+                      <MDBInput  type='text' onChange={handleFnChange} value={firstName} />
                       </label>
                     </MDBCol>
                     <MDBCol>
                     <label> Last Name
-                      <MDBInput  type='text' />
+                      <MDBInput  type='text'onChange={handleLnChange} value={lastName} />
                       </label>
                     </MDBCol>
                   </MDBRow>
                   <MDBRow>
                   
                     <label> Phone 
-                      <MDBInput  type='tel' className="mb-4" />
+                      <MDBInput  type='tel' className="mb-4" onChange={handlePhoneChange} value={phone}/>
                       </label>
                     </MDBRow>
                     <MDBRow>
                   
                     <label> Address 
-                      <MDBInput  type='text' className="mb-4" />
+                      <MDBInput  type='text' className="mb-4" onChange={handleAddressChange} value={address} />
                       </label>
                     
                     </MDBRow>
@@ -229,26 +373,24 @@ import { Link } from 'react-router-dom';
                   </MDBRow>
                     <MDBRow>
                     <label> Additional information 
-                  <MDBTextArea  rows={4} className="mb-4" />
+                  <MDBTextArea  rows={4} className="mb-4" onChange={handleInfoChange} value={additionalInfo}/>
                   </label>
                   </MDBRow>
-                  <div className="d-flex justify-content-center">
-                    <MDBCheckbox name='flexCheck' value='' id='flexCheckChecked' label='Save information for next order?' defaultChecked />
-                  </div>
+                
                 </form>
               </MDBCardBody>
             </MDBCard>
          
             <MDBCard className="mb-4"  style={{  border: "none", boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.1)"}} >
               <MDBCardBody>
-                <p className="text-uppercase fw-bold mb-3 text-font" style={{color: "#4e4e4e", }}>Payment Method</p>
+                <p className="text-uppercase fw-bold mb-3 text-font" style={{color: "#006DA3", }}>Payment Method</p>
                 <MDBRow>
                   
                 </MDBRow>
               </MDBCardBody>
             </MDBCard>
             <div className="text-center">
-              <MDBBtn className="mb-4 w-100 gradient-custom-3  col-md-10 text-uppercase h4 text-font">Place order</MDBBtn>
+              <MDBBtn onClick={addOrder} className="mb-4 w-100 gradient-custom-3  col-md-10 text-uppercase h4 text-font">Place order</MDBBtn>
             </div>
           </MDBCol>
         </MDBRow>

@@ -279,6 +279,30 @@ const searchProduct = async (req, res) => {
   }
 };
 
+
+const deleteUserCart = async (req, res) => {
+  try {
+    const id = req.user.id;
+
+    // Find the user by ID
+    const user = await User.findOne({ _id: id });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Clear the user's cart
+    user.cart = [];
+
+    // Save the changes
+    await user.save();
+
+    res.status(200).json({ message: 'User cart has been cleared' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getProducts,
   getProduct,
@@ -291,5 +315,6 @@ module.exports = {
   buyProduct,
   removeProduct,
   getCartProducts,
-  searchProduct
+  searchProduct,
+  deleteUserCart
 };

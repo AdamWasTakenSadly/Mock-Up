@@ -1,5 +1,5 @@
 const express =require('express')
-const {getUsers, getUser, getUserUsername, getUserEmail, getUserCart} = require ('../controllers/UsersController')
+const {getUsers, getUser, getUserUsername, getUserEmail, getUserCart,getUserNumber,getUserAddress} = require ('../controllers/UsersController')
 const router=express.Router()
 //const { requireAuth } = require('../Middleware/authMiddleware');
 
@@ -18,5 +18,13 @@ router.get('/:id/email',getUserEmail)
 
 //GET a single user cart
 router.get('/:id/cart',getUserCart)
+
+router.get('/number',getUserNumber)
+
+
+router.get('/address',getUserAddress)
+
+
+
 
 module.exports = router

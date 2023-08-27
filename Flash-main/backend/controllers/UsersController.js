@@ -54,10 +54,36 @@ const getUserCart = async (req, res) => {
   }
 };
 
+const getUserNumber = async (req, res) => {
+  try {
+    const id = req.user.id;
+
+    const email = await User.findById({ _id: id }).select({ phoneNumber: 1 });
+    res.status(200).json(email);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const getUserAddress = async (req, res) => {
+  try {
+    const id = req.user.id;
+    const email = await User.findById({ _id: id }).select({ location: 1 });
+    res.status(200).json(email);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
+
+
 module.exports = {
   getUsers,
   getUser,
   getUserUsername,
   getUserEmail,
   getUserCart,
+  getUserNumber,
+  getUserAddress
 };
