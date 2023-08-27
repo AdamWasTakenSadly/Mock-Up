@@ -11,6 +11,9 @@ const path = require("path");
 const productsRoutes = require("./routes/products");
 const usersRoutes = require("./routes/users");
 const guestRoutes = require("./routes/guest");
+const workerRoutes = require("./routes/worker")
+const ordersRoutes = require("./routes/orders")
+const promocodeRoutes = require("./routes/promocode")
 
 //functions for login routes
 const {
@@ -39,6 +42,9 @@ app.use((req, res, next) => {
 app.use("/products", productsRoutes);
 app.use("/users", usersRoutes);
 app.use("/guest", guestRoutes);
+app.use("/promocode",promocodeRoutes)
+app.use("/orders",ordersRoutes)
+app.use("/worker",workerRoutes)
 
 //connect to db and accessing same one everytime
 mongoose
