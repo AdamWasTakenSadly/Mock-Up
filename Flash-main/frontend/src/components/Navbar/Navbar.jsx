@@ -328,10 +328,10 @@ function Navbar1() {
                   <Popover id="cart-popover">
                     <Popover.Header
                       as="h3"
+                      className="mb-0 text-uppercase fw-bold text-font"
                       style={{
                         color: "#00688F", // Text color
                         fontSize: "18px", // Font size
-                        fontFamily: "Montserrat", // Font family
                         padding: "10px", // Padding
                         borderRadius: "0px", // Border radius
                         textAlign: "center",
@@ -473,7 +473,7 @@ function Navbar1() {
                       <Popover.Header
                         style={{
                           color: "white",
-                          backgroundColor: "#00DD7E",
+                          backgroundColor: "hsl(90, 40%, 50%)",
                           fontFamily: "Montserrat",
                           fontWeight: "bold",
                           borderRadius: "5px", // Border radius
@@ -489,7 +489,9 @@ function Navbar1() {
                           ":hover": { color: "white" }, // Set the color on hover
                         }}
                       >
+  <a href="/checkout" style={{ textDecoration: 'none', color: 'inherit'}}>
                         Proceed to checkout
+                        </a>
                       </Popover.Header>
                     )}
                   </Popover>

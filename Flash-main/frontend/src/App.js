@@ -18,7 +18,7 @@ import SignUp from './pages/SignUp/SignUp'
 import AccessDenied from './pages/AccessDenied'
 import Cookie from 'js-cookie'
 import Shop from './pages/ShopPage/Shop'
-
+import CheckoutPage from './pages/Checkout/Checkout'
 
 
 function App() {
@@ -37,16 +37,25 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path ='/shop' element ={<Shop/>}/>
 
+
             {isLoggedIn==undefined?
             (
             <Route>
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} /> 
-             
+              
             </Route>
             )
             : 
-            (<Route path="/" element={<Home />} />)
+            
+            (
+              <Route>
+              <Route path ='/checkout' element ={<CheckoutPage/>}/>
+
+            <Route path="/" element={<Home />} />
+            </Route>
+
+            )
           }
             
             <Route path="*" element={<AccessDenied />} />
