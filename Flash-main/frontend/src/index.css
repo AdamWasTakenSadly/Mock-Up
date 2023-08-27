@@ -441,6 +441,34 @@ input[type="range"]::-webkit-slider-thumb {
   background: linear-gradient(to right, #5cbfed, #519ced, #519ced, #006da3);
 }
 
+
+
+.gradient-custom-3 {
+  font-family: futura-pt, Tahoma, Geneva, Verdana, Arial;
+  font-style: normal;
+  font-size: 14px;
+  background-color: hsl(90, 40%, 50%);
+  color: white;
+  height: 40px;
+   /* Add a hover effect */
+   &:hover {
+   /* fallback for old browsers */
+  background-color: #a5e2e0;
+
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(
+    to right,
+    #5cbfed,
+    #519ced,
+    #519ced,
+    #006da3
+  );
+
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(to right, #5cbfed, #519ced, #519ced, #006da3);
+  }
+  
+}
 @media (min-width: 768px) {
   .gradient-form {
     height: 100vh !important;
