@@ -84,7 +84,7 @@ const getProductImage = async (req, res) => {
 
 //POST a new product
 const addProduct = async (req, res) => {
-  const { name, description, price, rating, image } = req.body;
+  const { name, description, price, rating, image, howToUse, amountLeft, discount, category } = req.body;
 
   try {
     const product = await Product.create({
@@ -93,6 +93,10 @@ const addProduct = async (req, res) => {
       price,
       rating,
       image,
+      howToUse,
+      amountLeft,
+      discount,
+      category
     });
     res.status(200).json(product);
   } catch (error) {
@@ -303,6 +307,117 @@ const deleteUserCart = async (req, res) => {
   }
 };
 
+const filterProducts = async(req,res)=>{
+
+  const {price,rating,inStock,category}=req.body
+
+  console.log(!price)
+
+  try{
+
+      if((price || price===0) && (rating || rating===0) && inStock && category) //filter by price and rating and in stock and category
+      {
+        const products = await Product.find({ "price": { $lte: price }, "rating": { $gte: rating }, "amountLeft": { $gte: 1 }, "category": category })
+        console.log("enetered 1")
+        return res.status(200).json(products)
+      }
+      else if ((price || price===0) && (rating || rating===0) && inStock && (!category || category==="")) //filter by price and rating and in stock 
+      {
+        const products = await Product.find({ "price": { $lte: price }, "rating": { $gte: rating }, "amountLeft": { $gte: 1 } })
+        console.log("enetered 2")
+        return res.status(200).json(products)
+      }
+      else if((price || price===0) && (rating || rating===0) && !inStock && category) //filter by price and rating and category
+      {
+        const products = await Product.find({ "price": { $lte: price }, "rating": { $gte: rating }, "category": category })
+        console.log("enetered 3")
+        return res.status(200).json(products)
+      }
+      else if((price || price===0) && ((!rating || rating==="") && rating!==0) && inStock && category) //filter by price and in stock and category
+      {
+        const products = await Product.find({ "price": { $lte: price }, "amountLeft": { $gte: 1 }, "category": category })
+        console.log("enetered 4")
+        return res.status(200).json(products)
+      }
+      else if(((!price || price==="") && price!==0) && (rating || rating===0) && inStock && category) //filter by rating and in stock and category
+      {
+        const products = await Product.find({ "rating": { $gte: rating }, "amountLeft": { $gte: 1 }, "category": category })
+        console.log("enetered 5")
+        return res.status(200).json(products)
+      }
+      else if((price || price===0) && (rating || rating===0) && !inStock && (!category || category==="")) //filter by price and rating 
+      {
+        const products = await Product.find({ "price": { $lte: price }, "rating": { $gte: rating } })
+        console.log("enetered 6")
+        return res.status(200).json(products)
+      }
+      else if((price || price===0) && ((!rating || rating==="") && rating!==0) && inStock && (!category || category==="")) //filter by price and in stock
+      {
+        const products = await Product.find({ "price": { $lte: price }, "amountLeft": { $gte: 1 }})
+        console.log("enetered 7")
+        return res.status(200).json(products)
+      }
+      else if((price || price===0) && ((!rating || rating==="") && rating!==0) && !inStock && category) //filter by price and category
+      {
+        const products = await Product.find({ "price": { $lte: price }, "category": category })
+        console.log("enetered 8")
+        return res.status(200).json(products)
+      }
+      else if(((!price || price==="") && price!==0) && (rating || rating===0) && inStock && (!category || category==="")) //filter by rating and in stock 
+      {
+        const products = await Product.find({  "rating": { $gte: rating }, "amountLeft": { $gte: 1 } })
+        console.log("enetered 9")
+        return res.status(200).json(products)
+      }
+      else if(((!price || price==="") && price!==0) && (rating || rating===0) && !inStock && category) //filter by rating and category
+      {
+        const products = await Product.find({  "rating": { $gte: rating }, "category": category })
+        console.log("enetered 10")
+        return res.status(200).json(products)
+      }
+      else if(((!price || price==="") && price!==0) && ((!rating || rating==="") && rating!==0) && inStock && category) //filter by in stock and category
+      {
+        const products = await Product.find({"amountLeft": { $gte: 1 }, "category": category })
+        console.log("enetered 11")
+        return res.status(200).json(products)
+      }
+      else if((price || price===0) && ((!rating || rating==="") && rating!==0) && !inStock && (!category || category==="")) //filter by price 
+      {
+        const products = await Product.find({ "price": { $lte: price }})
+        console.log("enetered 12")
+        return res.status(200).json(products)
+      }
+      else if(((!price || price==="") && price!==0) && (rating || rating===0) && !inStock && (!category || category==="")) //filter by rating 
+      {
+        const products = await Product.find({  "rating": { $gte: rating }})
+        console.log("enetered 13")
+        return res.status(200).json(products)
+      }
+      else if(((!price || price==="") && price!==0) && ((!rating || rating==="") && rating!==0) && inStock && (!category || category==="")) //filter by in stock 
+      {
+        const products = await Product.find({ "amountLeft": { $gte: 1 }})
+        console.log("enetered 14")
+        return res.status(200).json(products)
+      }
+      else if(((!price || price==="") && price!==0) && ((!rating || rating==="") && rating!==0) && !inStock && category) //filter by category 
+      {
+        const products = await Product.find({ "category": category})
+        console.log("enetered 15")
+        return res.status(200).json(products)
+      }
+      else if(((!price || price==="") && price!==0) && ((!rating || rating==="") && rating!==0) && !inStock && (!category || category==="")) //filter by nothing 
+      {
+        const products = await Product.find({})
+        console.log("enetered 16")
+        return res.status(200).json(products)
+      }
+
+  }catch(error)
+  {
+    res.status(400).json({ error: error.message })
+  }
+}
+
 module.exports = {
   getProducts,
   getProduct,
@@ -316,5 +431,6 @@ module.exports = {
   removeProduct,
   getCartProducts,
   searchProduct,
-  deleteUserCart
+  deleteUserCart,
+  filterProducts
 };
