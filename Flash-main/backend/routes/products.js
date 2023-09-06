@@ -12,7 +12,8 @@ const {
   removeProduct,
   getCartProducts,
   searchProduct,
-  deleteUserCart
+  deleteUserCart,
+  filterProducts
 } = require("../controllers/ProductsController");
 const router = express.Router();
 const { requireAuth } = require("../Middleware/authMiddleware");
@@ -55,7 +56,7 @@ router.post("/removeProduct", requireAuth, removeProduct);
 
 router.delete('/deleteCart',requireAuth,deleteUserCart)
 
-
+router.post('/filterProducts',filterProducts)
 
 
 module.exports = router;
