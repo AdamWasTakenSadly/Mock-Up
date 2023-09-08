@@ -51,8 +51,14 @@ const orderSchema = new Schema({
     type: String,
   },
   address: {
-    type: String,
-    required: true,
+    link: String,
+      street: String,
+      city: String,
+      region: String,
+      buildingNo: String,
+      floor: String,
+      flatNo:String
+
   },
   additionalInfo: {
     type: String,
