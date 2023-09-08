@@ -13,7 +13,11 @@ const {
   getCartProducts,
   searchProduct,
   deleteUserCart,
-  filterProducts
+  filterProducts,
+  getUserEmail,
+  getUserNumber,
+  getUserAddress,
+  deductStock
 } = require("../controllers/ProductsController");
 const router = express.Router();
 const { requireAuth } = require("../Middleware/authMiddleware");
@@ -21,7 +25,18 @@ const { requireAuth } = require("../Middleware/authMiddleware");
 
 router.get("/getCartProducts", requireAuth, getCartProducts);
 
+router.get("/userEmail", requireAuth, getUserEmail);
+
+router.get("/userNum", requireAuth, getUserNumber);
+
+router.get("/userAdd", requireAuth, getUserAddress);
+
+
+
 router.post('/search', searchProduct);
+
+router.post('/deduct', deductStock);
+
 
 //for a logged in user and the same are created for a guest
 //GET all products

@@ -66,11 +66,12 @@ const userSchema = mongoose.Schema(
       },
     ],
     location: {
-      link: String,
       street: String,
       city: String,
       region: String,
       buildingNo: String,
+      floor: String,
+      flatNo:String
     },
     phoneNumber: {
       type: String,

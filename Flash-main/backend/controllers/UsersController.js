@@ -35,8 +35,10 @@ const getUserUsername = async (req, res) => {
 //GET a single user email
 const getUserEmail = async (req, res) => {
   try {
-    const id = req.params.id;
-    const email = await User.findById({ _id: id }).select({ email: 1 });
+    console.log(req.user.id);
+
+    const userId = req.user.id;
+    const email = await User.findById(userId).select("email");
     res.status(200).json(email);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -58,8 +60,8 @@ const getUserNumber = async (req, res) => {
   try {
     const id = req.user.id;
 
-    const email = await User.findById({ _id: id }).select({ phoneNumber: 1 });
-    res.status(200).json(email);
+    const num = await User.findById({ _id: id }).select( {phoneNumber:1} );
+    res.status(200).json(num);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -68,8 +70,8 @@ const getUserNumber = async (req, res) => {
 const getUserAddress = async (req, res) => {
   try {
     const id = req.user.id;
-    const email = await User.findById({ _id: id }).select({ location: 1 });
-    res.status(200).json(email);
+    const add = await User.findById({ _id: id }).select({ location: 1 });
+    res.status(200).json(add);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
