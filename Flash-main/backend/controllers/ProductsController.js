@@ -84,15 +84,18 @@ const getProductImage = async (req, res) => {
 
 //POST a new product
 const addProduct = async (req, res) => {
-  const { name, description, price, rating, image } = req.body;
+  const { name, description, price, image, howToUse, amountLeft, discount,  category } = req.body;
 
   try {
     const product = await Product.create({
       name,
       description,
       price,
-      rating,
       image,
+      howToUse,
+      amountLeft,
+      discount,
+      category,
     });
     res.status(200).json(product);
   } catch (error) {
@@ -100,6 +103,23 @@ const addProduct = async (req, res) => {
   }
 };
 
+const editProduct = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const product = await Product.findOneAndUpdate(
+      { _id: id },
+      {
+        ...req.body,
+      }
+    );
+
+    res.status(200).json(product);
+  } 
+  catch{
+    res.status(400).json({ error: error.message});
+  }
+};
 /*const buyProduct = async (req, res) => {
   if (await User.findById(req.user._id)) {
     const id = req.query.id;
@@ -312,6 +332,7 @@ module.exports = {
   getProductDescription,
   getProductImage,
   addProduct,
+  editProduct,
   buyProduct,
   removeProduct,
   getCartProducts,

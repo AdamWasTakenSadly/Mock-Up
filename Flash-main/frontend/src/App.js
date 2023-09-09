@@ -7,8 +7,11 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar1 from './components/Navbar/Navbar'
 
 import Login from './pages/Login/Login'
-
-
+import CreateProduct from './pages/AdminCreateProduct/CreateProduct'
+import ProductsAdmin from './pages/ProductsAdmin/ProductsAdmin'
+import AdminEdit from './pages/AdminEditProduct/AdminEdit'
+import AdminLogs from './pages/AdminLogs/AdminLogs'
+import ProductsWM from './pages/ProductsWM/ProductsWM'
 
 import Footer from './components/Footer/Footer'
 import Home from './pages/Home/Home'
@@ -35,7 +38,13 @@ function App() {
           <Routes>
 
             <Route path="/" element={<Home />} />
-            <Route path ='/shop' element ={<Shop/>}/>
+            <Route path ='/shop' element ={<Shop/>}/> 
+            <Route path ='/adminCreate' element ={<CreateProduct/>}/>
+            <Route path ='/adminProducts' element ={<ProductsAdmin/>}/>
+            <Route path ='/adminEdit' element ={<AdminEdit/>}/>
+            <Route path ='/adminLogs' element ={<AdminLogs/>}/>
+            <Route path ='/WMProducts' element ={<ProductsWM/>}/>
+           
 
 
             {isLoggedIn==undefined?
@@ -68,6 +77,8 @@ function App() {
       </BrowserRouter>
 
     </div>
+
+    
   );
 }
 
