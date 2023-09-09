@@ -8,6 +8,7 @@ const {
   getProductDescription,
   getProductImage,
   addProduct,
+  editProduct,
   buyProduct,
   removeProduct,
   getCartProducts,
@@ -63,6 +64,9 @@ router.get("/:id/image", getProductImage);
 
 //POST a new product
 router.post("/", addProduct);
+
+//Edit an existing product
+router.patch("/:id", editProduct);
 
 //Buy product
 router.post("/buyProduct", requireAuth, buyProduct);
