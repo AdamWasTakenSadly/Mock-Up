@@ -1,0 +1,33 @@
+.orderButton {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ffffff; /* Button background color */
+    color: #006da3; /* Button text color */
+    border-width: 1px;
+    border-color:#006da3 ;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.3s ease; /* Hover effect transition */
+  }
+
+  .orderButton:last-child {
+    margin-right: 0;
+  }
+  
+  /* Hover effect */
+  .orderButton:hover {
+    background-color: #e5ebf1; /* Button background color on hover */
+  }
+
+  
+  
+  /* Style for each individual card (OrderCard component) */
+  .order-card {
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+   }
