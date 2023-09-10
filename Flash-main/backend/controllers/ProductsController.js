@@ -84,7 +84,7 @@ const getProductImage = async (req, res) => {
 
 //POST a new product
 const addProduct = async (req, res) => {
-  const { name, description, price, rating, image, howToUse, amountLeft, discount, category } = req.body;
+  const { name, description, price, image, howToUse, amountLeft, discount, category } = req.body;
 
 
   try {

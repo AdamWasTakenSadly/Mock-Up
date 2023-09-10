@@ -42,6 +42,7 @@ const orderSchema = new Schema({
   },
   orderStatus: {
     type: String,
+    required: true,
   },
   totalAmount: {
     type: Number,

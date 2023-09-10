@@ -11,6 +11,7 @@ import CreateProduct from './pages/AdminCreateProduct/CreateProduct'
 import ProductsAdmin from './pages/ProductsAdmin/ProductsAdmin'
 import AdminEdit from './pages/AdminEditProduct/AdminEdit'
 import AdminLogs from './pages/AdminLogs/AdminLogs'
+import AdminOrders from './pages/AdminOrders/AdminOrders'
 import ProductsWM from './pages/ProductsWM/ProductsWM'
 
 import Footer from './components/Footer/Footer'
@@ -43,6 +44,7 @@ function App() {
             <Route path ='/adminProducts' element ={<ProductsAdmin/>}/>
             <Route path ='/adminEdit' element ={<AdminEdit/>}/>
             <Route path ='/adminLogs' element ={<AdminLogs/>}/>
+            <Route path ='/adminOrders' element ={<AdminOrders/>}/>
             <Route path ='/WMProducts' element ={<ProductsWM/>}/>
            
 
