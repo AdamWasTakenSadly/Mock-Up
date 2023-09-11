@@ -8,6 +8,7 @@ const {
   getProductDescription,
   getProductImage,
   addProduct,
+  editProduct,
   buyProduct,
   removeProduct,
   getCartProducts,
@@ -15,7 +16,11 @@ const {
   deleteUserCart,
   filterProducts,
   addRatingAndOrReview,
-  getCurrUserRatingAndOrReview
+  getCurrUserRatingAndOrReview,
+  getUserEmail,
+  getUserNumber,
+  getUserAddress,
+  deductStock
 } = require("../controllers/ProductsController");
 const router = express.Router();
 const { requireAuth } = require("../Middleware/authMiddleware");
@@ -23,7 +28,18 @@ const { requireAuth } = require("../Middleware/authMiddleware");
 
 router.get("/getCartProducts", requireAuth, getCartProducts);
 
+router.get("/userEmail", requireAuth, getUserEmail);
+
+router.get("/userNum", requireAuth, getUserNumber);
+
+router.get("/userAdd", requireAuth, getUserAddress);
+
+
+
 router.post('/search', searchProduct);
+
+router.post('/deduct', deductStock);
+
 
 //for a logged in user and the same are created for a guest
 //GET all products
@@ -50,6 +66,9 @@ router.get("/:id/image", getProductImage);
 
 //POST a new product
 router.post("/", addProduct);
+
+//Edit an existing product
+router.patch("/:id", editProduct);
 
 //Buy product
 router.post("/buyProduct", requireAuth, buyProduct);

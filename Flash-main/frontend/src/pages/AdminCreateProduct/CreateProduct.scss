@@ -1,0 +1,21 @@
+.CenterWithin{
+    text-align: center;
+  }
+
+  .btn-mdb2 {
+    /* Add any styles specific to the MDBBtn component here */
+    display: flex;
+    cursor: pointer;
+    font-family: 'Montserrat';
+    padding: 15px 60px;
+    background-image: linear-gradient(to bottom, #0099D3, #006DA3);
+    color: #fff;
+    border-radius: 20px;
+    border-width: 0;
+    margin-top: 5px;
+    cursor: pointer;
+    font-weight: 0;
+    margin: 10px auto;
+    align-items: center;
+  }
+  

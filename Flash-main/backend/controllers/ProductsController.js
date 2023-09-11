@@ -85,19 +85,19 @@ const getProductImage = async (req, res) => {
 
 //POST a new product
 const addProduct = async (req, res) => {
-  const { name, description, price, rating, image, howToUse, amountLeft, discount, category } = req.body;
+  const { name, description, price, image, howToUse, amountLeft, discount, category } = req.body;
+
 
   try {
     const product = await Product.create({
       name,
       description,
       price,
-      rating,
       image,
       howToUse,
       amountLeft,
       discount,
-      category
+      category,
     });
     res.status(200).json(product);
   } catch (error) {
@@ -105,6 +105,23 @@ const addProduct = async (req, res) => {
   }
 };
 
+const editProduct = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const product = await Product.findOneAndUpdate(
+      { _id: id },
+      {
+        ...req.body,
+      }
+    );
+
+    res.status(200).json(product);
+  } 
+  catch{
+    res.status(400).json({ error: error.message});
+  }
+};
 /*const buyProduct = async (req, res) => {
   if (await User.findById(req.user._id)) {
     const id = req.query.id;
@@ -419,6 +436,7 @@ const filterProducts = async(req,res)=>{
   }
 }
 
+
 const addRatingAndOrReview = async (req,res) => {
 
   const userID=req.user.id
@@ -513,6 +531,72 @@ const getCurrUserRatingAndOrReview=async(req,res)=>{
   }
 }
 
+const getUserEmail = async (req, res) => {
+  try {
+    console.log(req.user.id);
+
+    const userId = req.user.id;
+    const email = await User.findById(userId).select({ email: 1 });
+    res.status(200).json(email);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
+const getUserNumber = async (req, res) => {
+  try {
+    const id = req.user.id;
+
+    const num = await User.findById({ _id: id }).select( {phoneNumber:1} );
+    res.status(200).json(num);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const getUserAddress = async (req, res) => {
+  try {
+    const id = req.user.id;
+    const add = await User.findById({ _id: id }).select({ location: 1 });
+    res.status(200).json(add);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const deductStock = async (req, res) => {
+  const orderDetails = req.body; // An array of { productId, quantity } objects
+
+  try {
+    // Loop through orderDetails and update product quantities
+    for (const { productId, quantity } of orderDetails) {
+      const product = await Product.findById(productId);
+
+      if (!product) {
+        return res.status(404).json({ error: 'Product not found' });
+      }
+
+      // Subtract the ordered quantity from the product's stock
+      product.amountLeft -= quantity;
+
+      if (product.quantity < 0) {
+        return res.status(400).json({ error: 'Insufficient stock' });
+      }
+
+      // Save the updated product in the database
+      await product.save();
+    }
+
+    // Respond with a success message
+    res.status(200).json({ message: 'Product quantities updated successfully' });
+  } catch (error) {
+    // Handle errors
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 module.exports = {
   getProducts,
   getProduct,
@@ -522,6 +606,7 @@ module.exports = {
   getProductDescription,
   getProductImage,
   addProduct,
+  editProduct,
   buyProduct,
   removeProduct,
   getCartProducts,
@@ -529,5 +614,10 @@ module.exports = {
   deleteUserCart,
   filterProducts,
   addRatingAndOrReview,
-  getCurrUserRatingAndOrReview
+  getCurrUserRatingAndOrReview,
+  getUserEmail,
+  getUserNumber,
+  getUserAddress,
+  deductStock
+
 };
