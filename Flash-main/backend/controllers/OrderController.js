@@ -94,6 +94,21 @@ const updateStatus = async (req, res) => {
   }
 };
 
+const getUserOrders = async(req,res)=>{
+
+  const userID=req.user.id
+  
+  try{
+    const result= await Order.find({"orderUser":userID})
+    res.status(200).json(result);
+  }
+  catch(error)
+  {
+    res.status(400).json({ error: error.message });
+  }
+}
+
+
 
 module.exports = {
   createOrder,
@@ -102,4 +117,5 @@ module.exports = {
   getOrdersShipped,
   getOrdersCanceled,
   updateStatus,
+  getUserOrders
 };

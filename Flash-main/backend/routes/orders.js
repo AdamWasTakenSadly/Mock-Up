@@ -4,7 +4,8 @@ const {createOrder, getOrdersPending,
     getOrdersDelivering,
     getOrdersShipped,
     getOrdersCanceled,
-    updateStatus} = require('../controllers/OrderController');
+    updateStatus,
+    getUserOrders} = require('../controllers/OrderController');
 const { requireAuth } = require("../Middleware/authMiddleware");
 
 
@@ -15,5 +16,7 @@ router.get('/delivering', getOrdersDelivering);
 router.get('/shipped', getOrdersShipped);
 router.get('/canceled', getOrdersCanceled);
 router.patch('/status/:id', updateStatus);
+
+router.get('/getUserOrders',requireAuth, getUserOrders);
 
 module.exports = router;
