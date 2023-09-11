@@ -522,7 +522,7 @@ const getCurrUserRatingAndOrReview=async(req,res)=>{
     }
     else
     {
-      return res.status(201).json("current user didn't rate or review before")
+      return res.status(404).json("current user didn't rate or review before")
     }
 
   }catch(error)
