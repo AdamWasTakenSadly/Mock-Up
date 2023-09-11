@@ -1,4 +1,5 @@
 //const currency = require("iso-country-currency")
+const { BSON, EJSON, ObjectId } = require('bson');
 
 const Product = require("../models/ProductsModel");
 
@@ -418,6 +419,100 @@ const filterProducts = async(req,res)=>{
   }
 }
 
+const addRatingAndOrReview = async (req,res) => {
+
+  const userID=req.user.id
+  const productID=req.params.id
+  const {rating,review}=req.body
+
+  const userIDasObj=new BSON.ObjectId(userID)
+
+  try{
+
+    //get info to update the avergae rating later
+    const currAvgRating=(await Product.find({"_id":productID}).select({_id:0,rating:1})).at(0).rating
+    const currNoOfRatings=await (await Product.find({"_id":productID}).select({_id:0,ratingsAndReviews:1})).at(0).ratingsAndReviews.length
+
+    //did the user rate before
+    const ratedBefore=await Product.find({"_id":productID, "ratingsAndReviews.user":userID}).select({_id:0,ratingsAndReviews:1})
+
+   
+    if (ratedBefore.length!==0)
+    {
+      console.log("entered rated before")
+
+      //if the user rated before, get his old rating so you can update teh average
+      const tmp=ratedBefore.at(0).ratingsAndReviews
+      const currUserRating=tmp.find(element => {
+        return  element.user .equals( userIDasObj)
+      });
+      
+
+      if((rating || rating===0) && review)
+      {
+        const result=await Product.updateOne({"_id":productID,"ratingsAndReviews.user":userID},{$set: { "ratingsAndReviews.$.rating" : rating, "ratingsAndReviews.$.review" : review}})
+        const newAvg=(((currAvgRating*currNoOfRatings)-(currUserRating.rating)+rating)/currNoOfRatings).toPrecision(4)
+        const updateAvg=await Product.updateOne({"_id":productID},{$set: { "rating" : newAvg}})
+        return res.status(200).json(result)
+      }
+      else if(rating || rating===0)
+      {
+        const result=await Product.updateOne({"_id":productID,"ratingsAndReviews.user":userID},{$set: { "ratingsAndReviews.$.rating" : rating}})
+        const newAvg=(((currAvgRating*currNoOfRatings)-(currUserRating.rating)+rating)/currNoOfRatings).toPrecision(4)
+        const updateAvg=await Product.updateOne({"_id":productID},{$set: { "rating" : newAvg}})
+        return res.status(200).json(result)
+      }
+      else if (review)
+      {
+        const result=await Product.updateOne({"_id":productID,"ratingsAndReviews.user":userID},{$set: { "ratingsAndReviews.$.review" : review}})
+        return res.status(200).json(result)
+      }
+    }
+    else
+    {
+      console.log("entered else")
+      const result=await Product.updateOne({"_id":productID},{$push: { "ratingsAndReviews":{user:userID,rating:rating,review:review}}})
+      const newAvg=(((currAvgRating*currNoOfRatings)+rating)/(currNoOfRatings+1)).toPrecision(4)
+        const updateAvg=await Product.updateOne({"_id":productID},{$set: { "rating" : newAvg}})
+        return res.status(200).json(result)
+    }
+
+  }catch(error)
+  {
+    res.status(400).json({ error: error.message })
+  }
+}
+
+const getCurrUserRatingAndOrReview=async(req,res)=>{
+
+  const userID=req.user.id
+  const productID=req.params.id
+
+  const userIDasObj=new BSON.ObjectId(userID)
+
+  try{
+
+    const ratedBefore=await Product.find({"_id":productID, "ratingsAndReviews.user":userID}).select({_id:0,ratingsAndReviews:1})
+    if(ratedBefore.length!==0)
+    {
+      const tmp=ratedBefore.at(0).ratingsAndReviews
+      const currUserRating=tmp.find(element => {
+        return  element.user .equals( userIDasObj)
+      });
+
+      return res.status(200).json(currUserRating)
+    }
+    else
+    {
+      return res.status(201).json("current user didn't rate or review before")
+    }
+
+  }catch(error)
+  {
+    res.status(400).json({ error: error.message })
+  }
+}
+
 module.exports = {
   getProducts,
   getProduct,
@@ -432,5 +527,7 @@ module.exports = {
   getCartProducts,
   searchProduct,
   deleteUserCart,
-  filterProducts
+  filterProducts,
+  addRatingAndOrReview,
+  getCurrUserRatingAndOrReview
 };

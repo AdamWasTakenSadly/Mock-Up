@@ -13,7 +13,9 @@ const {
   getCartProducts,
   searchProduct,
   deleteUserCart,
-  filterProducts
+  filterProducts,
+  addRatingAndOrReview,
+  getCurrUserRatingAndOrReview
 } = require("../controllers/ProductsController");
 const router = express.Router();
 const { requireAuth } = require("../Middleware/authMiddleware");
@@ -57,6 +59,11 @@ router.post("/removeProduct", requireAuth, removeProduct);
 router.delete('/deleteCart',requireAuth,deleteUserCart)
 
 router.post('/filterProducts',filterProducts)
+
+router.patch('/:id/editOrAddRatingReview',requireAuth,addRatingAndOrReview)
+
+router.get('/:id/getCurrUserRatingReview',requireAuth,getCurrUserRatingAndOrReview)
+
 
 
 module.exports = router;
