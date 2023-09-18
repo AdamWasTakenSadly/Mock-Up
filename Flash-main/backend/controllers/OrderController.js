@@ -33,6 +33,8 @@ const createOrder = async (req, res) => {
 
 // Get pending orders
   const  getOrdersPending = async (req, res) => {
+    if(await req.user.role == "Admin")
+    {
     try{
     const orders = await Order.find({orderStatus:"Pending"});
     res.status(200).json(orders);
@@ -40,10 +42,17 @@ const createOrder = async (req, res) => {
  catch (error) {
   res.status(400).json({ error: error.message });
 } 
+}
+else
+{
+  res.status(400).json({ error: "Access Restriced"});
+}
 };
 
 // Get delivering orders
 const  getOrdersDelivering = async (req, res) => {
+  if(await req.user.role == "Admin")
+  {
   try{
   const orders = await Order.find({orderStatus:"Delivering"});
   res.status(200).json(orders);
@@ -51,10 +60,18 @@ const  getOrdersDelivering = async (req, res) => {
 catch (error) {
 res.status(400).json({ error: error.message });
 } 
+  }
+
+  else
+{
+  res.status(400).json({ error: "Access Restriced"});
+}
 };
 
 // Get Shipped orders
 const  getOrdersShipped = async (req, res) => {
+  if(await req.user.role == "Admin")
+  {
   try{
   const orders = await Order.find({orderStatus:"Shipped"});
   res.status(200).json(orders);
@@ -62,10 +79,17 @@ const  getOrdersShipped = async (req, res) => {
 catch (error) {
 res.status(400).json({ error: error.message });
 } 
+}
+else
+{
+  res.status(400).json({ error: "Access Restriced"});
+}
 };
 
 // Get cenceled orders
 const  getOrdersCanceled = async (req, res) => {
+  if(await req.user.role == "Admin")
+  {
   try{
   const orders = await Order.find({orderStatus:"Canceled"});
   res.status(200).json(orders);
@@ -73,10 +97,17 @@ const  getOrdersCanceled = async (req, res) => {
 catch (error) {
 res.status(400).json({ error: error.message });
 } 
+  }
+  else
+{
+  res.status(400).json({ error: "Access Restriced"});
+}
 };
 
 // Update order status
 const updateStatus = async (req, res) => {
+  if(await req.user.role == "Admin")
+  {
   try {
     const id = req.params.id;
 
@@ -92,6 +123,11 @@ const updateStatus = async (req, res) => {
   catch{
     res.status(400).json({ error: error.message});
   }
+}
+else
+{
+  res.status(400).json({ error: "Access Restriced"});
+}
 };
 
 

@@ -29,7 +29,7 @@ const AdminEdit =()=>{
     
     const fetchProduct = async () => {
         try {
-            const response = await fetch("/products/" + id, {
+            const response = await fetch("/products/A/" + id, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'

@@ -65,7 +65,7 @@ const ProductDetails = ({ product }) => {
       const product = {
         amountLeft,
         }
-        const response = await fetch ("/products/"+ productID,{
+        const response = await fetch ("/products/amount/"+ productID,{
             method: 'PATCH',
             body:JSON.stringify(product),
             headers: {

@@ -5,15 +5,15 @@ const {createOrder, getOrdersPending,
     getOrdersShipped,
     getOrdersCanceled,
     updateStatus} = require('../controllers/OrderController');
-const { requireAuth } = require("../Middleware/authMiddleware");
+const { requireAuth, requireAuth2 } = require("../Middleware/authMiddleware");
 
 
 // Routes
 router.post('/createOrder', requireAuth, createOrder);
-router.get('/pending', getOrdersPending);
-router.get('/delivering', getOrdersDelivering);
-router.get('/shipped', getOrdersShipped);
-router.get('/canceled', getOrdersCanceled);
-router.patch('/status/:id', updateStatus);
+router.get('/pending', requireAuth2, getOrdersPending);
+router.get('/delivering', requireAuth2, getOrdersDelivering);
+router.get('/shipped', requireAuth2, getOrdersShipped);
+router.get('/canceled', requireAuth2, getOrdersCanceled);
+router.patch('/status/:id', requireAuth2, updateStatus);
 
 module.exports = router;
