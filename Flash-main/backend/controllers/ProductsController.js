@@ -26,6 +26,16 @@ const getProduct = async (req, res) => {
   }
 };
 
+const getProductAdmin = async (req, res) => {
+  try {
+    var id = req.params.id;
+    const product = await Product.findById({ _id: id }).select();
+    res.status(201).json(product);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 //GET a single product name
 const getProductName = async (req, res) => {
   try {
@@ -85,6 +95,10 @@ const getProductImage = async (req, res) => {
 
 //POST a new product
 const addProduct = async (req, res) => {
+
+  if(await req.user.role == "Admin")
+  {
+
   const { name, description, price, image, howToUse, amountLeft, discount, category } = req.body;
 
 
@@ -103,9 +117,16 @@ const addProduct = async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
+}
+else
+{
+  res.status(400).json({ error: "Access Restriced"});
+}
 };
 
 const editProduct = async (req, res) => {
+  if(await req.user.role == "Admin")
+  {
   try {
     const id = req.params.id;
 
@@ -121,6 +142,41 @@ const editProduct = async (req, res) => {
   catch{
     res.status(400).json({ error: error.message});
   }
+}
+
+else
+{
+  res.status(400).json({ error: "Access Restriced"});
+}
+
+};
+
+const editProductAmount = async (req, res) => {
+
+  if(await req.user.role == "WM")
+  {
+  try {
+    const id = req.params.id;
+    const newAmountLeft = req.body.amountLeft;
+
+    const product = await Product.findOneAndUpdate(
+      { _id: id },
+      {
+        amountLeft: newAmountLeft,
+      }
+    );
+
+    res.status(200).json(product);
+  } 
+  catch{
+    res.status(400).json({ error: error.message});
+  }
+
+}
+else
+{
+  res.status(400).json({ error: "Access Restriced"});
+}
 };
 /*const buyProduct = async (req, res) => {
   if (await User.findById(req.user._id)) {
@@ -600,6 +656,7 @@ const deductStock = async (req, res) => {
 module.exports = {
   getProducts,
   getProduct,
+  getProductAdmin,
   getProductName,
   getProductPrice,
   getProductRating,
@@ -607,6 +664,7 @@ module.exports = {
   getProductImage,
   addProduct,
   editProduct,
+  editProductAmount,
   buyProduct,
   removeProduct,
   getCartProducts,

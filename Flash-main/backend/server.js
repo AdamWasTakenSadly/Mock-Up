@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { requireAuth } = require("./Middleware/authMiddleware");
+const { requireAuth,requireAuth2 } = require("./Middleware/authMiddleware");
 
 const cors = require("cors");
 const express = require("express");
@@ -21,6 +21,8 @@ const promocodeRoutes = require("./routes/promocode")
 const {
   login,
   signUp,
+  loginWorker,
+  signUpWorker,
   logOut,
   getCurrentUserId,
 } = require("./controllers/loginController");
@@ -81,6 +83,10 @@ app.get("/", function (req, res) {
 app.post("/login", login);
 
 app.post("/signup", signUp);
+
+app.post("/loginWorker", loginWorker);
+
+app.post("/signupWorker", signUpWorker);
 
 app.get("/logout", logOut);
 

@@ -2,6 +2,7 @@ const express = require("express");
 const {
   getProducts,
   getProduct,
+  getProductAdmin,
   getProductName,
   getProductPrice,
   getProductRating,
@@ -9,6 +10,7 @@ const {
   getProductImage,
   addProduct,
   editProduct,
+  editProductAmount,
   buyProduct,
   removeProduct,
   getCartProducts,
@@ -23,7 +25,7 @@ const {
   deductStock
 } = require("../controllers/ProductsController");
 const router = express.Router();
-const { requireAuth } = require("../Middleware/authMiddleware");
+const { requireAuth,requireAuth2 } = require("../Middleware/authMiddleware");
 
 
 router.get("/getCartProducts", requireAuth, getCartProducts);
@@ -48,6 +50,8 @@ router.get("/", requireAuth, getProducts);
 //GET a single product
 router.get("/:id", requireAuth, getProduct);
 
+router.get("/A/:id", requireAuth2, getProductAdmin);
+
 //for testing purposes, so no need to protect them using requireAuth
 //GET a single product name
 router.get("/:id/name", getProductName);
@@ -65,10 +69,12 @@ router.get("/:id/description", getProductDescription);
 router.get("/:id/image", getProductImage);
 
 //POST a new product
-router.post("/", addProduct);
+router.post("/", requireAuth2, addProduct);
 
 //Edit an existing product
-router.patch("/:id", editProduct);
+router.patch("/:id", requireAuth2, editProduct);
+
+router.patch("/amount/:id", requireAuth2, editProductAmount);
 
 //Buy product
 router.post("/buyProduct", requireAuth, buyProduct);
