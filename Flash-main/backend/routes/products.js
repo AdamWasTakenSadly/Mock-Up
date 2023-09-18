@@ -17,6 +17,8 @@ const {
   searchProduct,
   deleteUserCart,
   filterProducts,
+  addRatingAndOrReview,
+  getCurrUserRatingAndOrReview,
   getUserEmail,
   getUserNumber,
   getUserAddress,
@@ -82,6 +84,11 @@ router.post("/removeProduct", requireAuth, removeProduct);
 router.delete('/deleteCart',requireAuth,deleteUserCart)
 
 router.post('/filterProducts',filterProducts)
+
+router.patch('/:id/editOrAddRatingReview',requireAuth,addRatingAndOrReview)
+
+router.get('/:id/getCurrUserRatingReview',requireAuth,getCurrUserRatingAndOrReview)
+
 
 
 module.exports = router;

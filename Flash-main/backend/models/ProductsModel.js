@@ -35,6 +35,21 @@ const productSchema = new Schema({
   category: {
     type: String,
   },
+  ratingsAndReviews: [
+    {
+      user:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users', // Reference the user model
+        required: true,
+      },
+      rating:{
+        type:Number
+      },
+      review:{
+        type:String
+      }
+    },
+  ]
 }, { timestamps: true });
 
 module.exports = mongoose.model('Product', productSchema);
