@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
   //order details
     const [firstName,setFirstName] =useState("")
     const [lastName,setLastName] =useState("")
+    const [oPhone,setOPhone] =useState("")
     const [phone,setPhone] =useState("")
     const [products,setProducts] =useState([])
     const [totalAmount,setTotalAmount] =useState("")
@@ -20,7 +21,7 @@ import { Link } from 'react-router-dom';
     const [flatNo,setFlatNo] =useState("")
     const [floor,setFloor] =useState("")
 
-    const [additionalInfo,setAdditionalInfo] =useState("")
+    const [additionalInfo,setAdditionalInfo] =useState("none")
 
     const [address, setAddress] = useState({
       link: '',
@@ -32,6 +33,7 @@ import { Link } from 'react-router-dom';
       flatNo: '',
     });
     
+    const [isChecked, setIsChecked] = useState(false);
 
     const [cartProducts, setCartProducts] = useState([]);
     const [mapsLink, setMapsLink] = useState('');
@@ -67,6 +69,7 @@ import { Link } from 'react-router-dom';
       if (response.ok) {
         const unumber = await response.json();
         setPhone(unumber.phoneNumber);
+        setOPhone(unumber.phoneNumber);
         console.log(unumber);
       }
     } catch (error) {
@@ -105,6 +108,95 @@ import { Link } from 'react-router-dom';
     }
       
   };
+
+  const editUserAddress = async (updatedAddress) => {
+    
+    try {
+      const response = await fetch("/users/editAddress", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedAddress),
+      });
+  
+      if (response.ok) {
+        const result = await response.json();
+        console.log(result);
+        return result;
+      } else {
+        throw new Error("Failed to update address");
+      }
+    } catch (error) {
+      console.error("Error updating address:", error);
+      throw error;
+    }
+  
+};
+
+  const editUserNumber = async (updatedNumber) => {
+    try {
+      const response = await fetch("/users/editPhoneNo", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedNumber),
+      });
+  
+      if (response.ok) {
+        const result = await response.json();
+        console.log(result);
+        return result;
+      } else {
+        throw new Error("Failed to update number");
+      }
+    } catch (error) {
+      console.error("Error updating number:", error);
+      throw error;
+    }
+  };
+  
+
+
+  const handleUpdateAddress = (event) => {
+    setIsChecked(event.target.checked);
+    if (!isChecked) {
+      const updatedAddress = {
+        newStreet: street,
+        newCity: city,
+        newRegion: region,
+        newBuildingNo: buildingNo,
+        newFloor: floor,
+        newFlatNo: flatNo,
+      };
+      const updatedNumber = {
+        newPhoneNo: phone
+      }
+    
+      editUserAddress(updatedAddress)
+        .then((result) => {
+          console.log('Address updated successfully!');
+        })
+        .catch((error) => {
+          // Handle errors here, e.g., show an error message
+          console.log('Failed to update address. Please try again.');
+        });
+
+        if(oPhone!=phone){
+
+          editUserNumber(updatedNumber)
+          .then((result) => {
+            console.log('Number updated successfully!');
+          })
+          .catch((error) => {
+            // Handle errors here, e.g., show an error message
+            console.log('Failed to update number. Please try again.');
+          });
+      }
+    }
+  };
+  
 
 
   const handleFnChange=(event)=>{
@@ -506,7 +598,9 @@ const handleStreetChange = (event) => {
                   <MDBTextArea  rows={4} className="mb-4" onChange={handleInfoChange} value={additionalInfo}/>
                   </label>
                   </MDBRow>
-                
+                  <div className="d-flex justify-content-center">
+                    <MDBCheckbox name='flexCheck' value='' id='flexCheckChecked' label='Set as default address for next time?' defaultChecked={false}  onChange={handleUpdateAddress}/>
+                  </div>
                 </form>
               </MDBCardBody>
             </MDBCard>
@@ -515,9 +609,11 @@ const handleStreetChange = (event) => {
               <MDBCardBody>
                 <p className="text-uppercase fw-bold mb-3 text-font" style={{color: "#006DA3", }}>Payment Method</p>
                 <MDBRow>
-                  
+                
                 </MDBRow>
+               
               </MDBCardBody>
+              
             </MDBCard>
             <div className="text-center">
               <MDBBtn onClick={addOrder} className="mb-4 w-100 gradient-custom-3  col-md-10 text-uppercase h4 text-font">Place order</MDBBtn>
