@@ -3,7 +3,7 @@ const router = express.Router();
 const {createOrder, getOrdersPending,
     getOrdersDelivering,
     getOrdersShipped,
-    getOrdersCanceled,
+    getOrdersCanceled,getUserOrders,
     updateStatus} = require('../controllers/OrderController');
 const { requireAuth, requireAuth2 } = require("../Middleware/authMiddleware");
 
