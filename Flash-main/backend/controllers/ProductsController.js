@@ -84,7 +84,7 @@ const getProductImage = async (req, res) => {
 
 //POST a new product
 const addProduct = async (req, res) => {
-  const { name, description, price, rating, image } = req.body;
+  const { name, description, price, rating, image, amountLeft } = req.body;
 
   try {
     const product = await Product.create({
@@ -93,6 +93,7 @@ const addProduct = async (req, res) => {
       price,
       rating,
       image,
+      amountLeft,
     });
     res.status(200).json(product);
   } catch (error) {
@@ -156,10 +157,71 @@ const buyProduct = async (req, res) => {
     const existingProduct = cartTemp.find(
       (item) => item.product._id.toString() === productID
     );
-    if (existingProduct) {
-      existingProduct.quantity += 1;
-    } else {
-      cartTemp.push({ product, quantity: 1 });
+    //if the product is already in the cart use the amountLeft of the instance of the product in the cart. If not then use the amountLeft of the main product.
+    //check if user.cart.product.amountLeft>0
+    if (product.amountLeft > 0) {
+      if (existingProduct) {
+        console.log(existingProduct.product.amountLeft);
+        if (existingProduct.product.amountLeft > 0) {
+          existingProduct.quantity += 1;
+          console.log(existingProduct.product.amountLeft);
+          console.log(product.amountLeft);
+          existingProduct.product.amountLeft =
+            existingProduct.product.amountLeft - 1;
+
+          console.log(existingProduct.product.amountLeft);
+          /* const newAmount = product.amountLeft - 1;
+
+        const updatedProduct = await Product.findOneAndUpdate(
+          { _id: productID },
+          { amountLeft: newAmount },
+          { new: true }
+        );*/
+
+          //move subtracting the product amountLeft to checkout
+          /* product.amountLeft -= 1;
+        const updatedProduct = await Product.findOneAndUpdate(
+          { _id: productID },
+          { amountLeft: product.amountLeft },
+          { new: true }
+        );*/
+          // console.log(product.amountLeft);
+          // console.log(existingProduct.product.amountLeft);
+        } else {
+          console.log("product currently out of stock");
+          return res
+            .status(400)
+            .json({ error: "Product is currently out of stock" });
+        }
+      } else {
+        //console.log(product.amountLeft);
+        product.amountLeft -= 1;
+        /* const newAmount = product.amountLeft - 1;
+      const updatedProduct = await Product.findOneAndUpdate(
+        { _id: productID },
+        { amountLeft: newAmount },
+        { new: true }
+      );*/
+
+        // const newProduct = await Product.findById(productID);
+        //console.log(newProduct);
+        // console.log(product.amountLeft);
+        // const cartProduct = product;
+        // cartProduct.amountLeft = product.amountLeft - 1;
+        cartTemp.push({ product, quantity: 1 });
+        /* const updatedProduct = await Product.findOneAndUpdate(
+        { _id: productID },
+        { amountLeft: product.amountLeft },
+        { new: true }
+      );*/
+        console.log(product);
+        // console.log(cartProduct);
+        //console.log(cartTemp[0].product);
+        //product.amountLeft -= 1;
+      }
+    } else if (product.amountLeft <= 0) {
+      console.log("product out of stock");
+      return res.status(400).json({ error: "Product is out of stock" });
     }
 
     const updatedUser = await User.findOneAndUpdate(
@@ -201,6 +263,9 @@ const removeProduct = async (req, res) => {
       if (cartTemp[indexOfProduct].quantity > 1) {
         // Decrement the quantity if it's greater than 1
         cartTemp[indexOfProduct].quantity--;
+        cartTemp[indexOfProduct].product.amountLeft += 1;
+        // cartTemp[indexOfProduct].product.amountLeft += 1;
+
         console.log("hiiii");
       } else {
         // Filter out the product from the cart if its quantity is 1 or less
@@ -209,15 +274,29 @@ const removeProduct = async (req, res) => {
         );
         console.log("hiiii");
       }
+
+      const product = await Product.findById(productID);
+
+      const newAmount = (product.amountLeft += 1);
+      //updatedProduct.amountLeft += 1;
+
+      /*const updatedProduct = await Product.findOneAndUpdate(
+        { _id: productID },
+        { amountLeft: newAmount },
+        { new: true }
+      );
+      console.log(product.amountLeft);
+      //console.log(updatedProduct);
+    }*/
+
+      const updatedUser = await User.findOneAndUpdate(
+        { _id: userId },
+        { cart: cartTemp },
+        { new: true }
+      );
+
+      res.status(200).json(updatedUser);
     }
-
-    const updatedUser = await User.findOneAndUpdate(
-      { _id: userId },
-      { cart: cartTemp },
-      { new: true }
-    );
-
-    res.status(200).json(updatedUser);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Something went wrong" });
@@ -229,7 +308,8 @@ const getCartProducts = async (req, res) => {
     const userId = req.user.id;
 
     // Find the user by ID and select the 'cart' field
-    const user = await User.findById(userId).select('cart');
+    // const user = await User.findById(userId).select("cart");
+    const user = await User.findById(userId);
 
     if (!user) {
       return res.status(400).json({ error: "User not found" });
@@ -245,15 +325,17 @@ const getCartProducts = async (req, res) => {
     const cartWithProducts = user.cart.map((cartItem) => {
       const product = products.find((p) => p._id.equals(cartItem.product._id));
       if (product) {
+        console.log(cartItem.product.amountLeft);
         return {
           productName: product.name,
           productID: product._id,
           productImage: product.image,
           productPrice: product.price,
           quantity: cartItem.quantity,
-
+          amountLeft: cartItem.product.amountLeft,
         };
       }
+
       return null;
     });
 
@@ -267,18 +349,89 @@ const getCartProducts = async (req, res) => {
   }
 };
 
+const checkProductStock = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(400).json({ error: "User not found" });
+    }
+
+    // Extract product IDs from the user's cart
+    const productIDs = user.cart.map((product) => product.product);
+
+    // Fetch the products from the database based on the product IDs
+    const products = await Product.find({ _id: { $in: productIDs } });
+
+    // Map the product details (name, image, price) to the cart items
+    const cartWithProducts = user.cart.map((cartItem) => {
+      const product = products.find((p) => p._id.equals(cartItem.product._id));
+      if (product) {
+        console.log(cartItem.product.amountLeft);
+        return {
+          productName: product.name,
+          productID: product._id,
+          productImage: product.image,
+          productPrice: product.price,
+          quantity: cartItem.quantity,
+          amountLeft: cartItem.product.amountLeft,
+        };
+      }
+
+      return null;
+    });
+
+    var flag = false;
+    var outOfStockProduct = [];
+    var response = [];
+
+    for (let i = 0; i < cartWithProducts.length; i++) {
+      // console.log(ProductsInCart[i].quantity);
+      for (let j = 0; j < products.length; j++) {
+        //console.log(products[j].amountLeft);
+        if (cartWithProducts[i].productID === products[j]._id) {
+          console.log("here");
+          //console.log(cartProducts[i].quantity);
+          // console.log(products[j].amountLeft);
+          if (cartWithProducts[i].quantity > products[j].amountLeft) {
+            console.log("here2");
+            //console.log(ProductsInCart[i].quantity);
+            console.log(products[j].amountLeft);
+            flag = true;
+            outOfStockProduct.push(products[j]);
+            console.log(flag);
+          }
+        }
+      }
+    }
+
+    response.push(flag);
+    response.push(outOfStockProduct);
+
+    console.log(flag);
+    if (flag === false) {
+      console.log("here3");
+    }
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+};
+
 const searchProduct = async (req, res) => {
   try {
-    const prefix = req.body.input || ''; // Get the search prefix from the query parameter
-    const query = { name: { $regex: `${prefix}`, $options: 'i' } };
+    const prefix = req.body.input || ""; // Get the search prefix from the query parameter
+    const query = { name: { $regex: `${prefix}`, $options: "i" } };
     const products = await Product.find(query);
     res.status(200).json(products);
   } catch (error) {
-    console.error('Error searching products:', error);
-    return res.status(500).json({ error: 'Internal server error' });
-  }
+    console.error("Error searching products:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 };
-
 
 const deleteUserCart = async (req, res) => {
   try {
@@ -288,7 +441,7 @@ const deleteUserCart = async (req, res) => {
     const user = await User.findOne({ _id: id });
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     // Clear the user's cart
@@ -297,9 +450,35 @@ const deleteUserCart = async (req, res) => {
     // Save the changes
     await user.save();
 
-    res.status(200).json({ message: 'User cart has been cleared' });
+    res.status(200).json({ message: "User cart has been cleared" });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+//gets the user email
+const getUserEmail = async (req, res) => {
+  try {
+    // Get the user ID from req.user.id provided by Passport.js
+    const userId = req.user.id;
+
+    // Find the user by their user ID in the database
+    const user = await User.findById(userId);
+    console.log(user);
+
+    // Check if the user exists
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Extract and return the user's email
+    const userEmail = user.email;
+    console.log(userEmail);
+    // Send the email as JSON response
+    res.status(200).json(user.email);
+  } catch (error) {
+    console.error("Error fetching user email:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -316,5 +495,7 @@ module.exports = {
   removeProduct,
   getCartProducts,
   searchProduct,
-  deleteUserCart
+  deleteUserCart,
+  getUserEmail,
+  checkProductStock,
 };
