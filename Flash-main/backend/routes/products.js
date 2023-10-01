@@ -16,6 +16,9 @@ const {
   getCartProducts,
   searchProduct,
   deleteUserCart,
+
+  checkProductStock,
+
   filterProducts,
   addRatingAndOrReview,
   getCurrUserRatingAndOrReview,
@@ -23,14 +26,19 @@ const {
   getUserNumber,
   getUserAddress,
   deductStock
+
 } = require("../controllers/ProductsController");
 const router = express.Router();
 const { requireAuth,requireAuth2 } = require("../Middleware/authMiddleware");
 
-
 router.get("/getCartProducts", requireAuth, getCartProducts);
 
-router.get("/userEmail", requireAuth, getUserEmail);
+
+router.get("/checkProductStock", requireAuth, checkProductStock);
+
+router.get("/getUserEmail", requireAuth, getUserEmail);
+
+
 
 router.get("/userNum", requireAuth, getUserNumber);
 
@@ -39,6 +47,7 @@ router.get("/userAdd", requireAuth, getUserAddress);
 
 
 router.post('/search', searchProduct);
+
 
 router.post('/deduct', deductStock);
 
@@ -81,6 +90,7 @@ router.post("/buyProduct", requireAuth, buyProduct);
 
 router.post("/removeProduct", requireAuth, removeProduct);
 
+
 router.delete('/deleteCart',requireAuth,deleteUserCart)
 
 router.post('/filterProducts',filterProducts)
@@ -88,6 +98,7 @@ router.post('/filterProducts',filterProducts)
 router.patch('/:id/editOrAddRatingReview',requireAuth,addRatingAndOrReview)
 
 router.get('/:id/getCurrUserRatingReview',requireAuth,getCurrUserRatingAndOrReview)
+
 
 
 
