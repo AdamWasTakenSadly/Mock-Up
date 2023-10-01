@@ -10,13 +10,30 @@ import { Link } from 'react-router-dom';
   //order details
     const [firstName,setFirstName] =useState("")
     const [lastName,setLastName] =useState("")
+    const [oPhone,setOPhone] =useState("")
     const [phone,setPhone] =useState("")
     const [products,setProducts] =useState([])
     const [totalAmount,setTotalAmount] =useState("")
-    const [address,setAddress] =useState("")
-    const [additionalInfo,setAdditionalInfo] =useState("")
+    const [city,setCity] =useState("")
+    const [street,setStreet] =useState("")
+    const [region,setRegion] =useState("")
+    const [buildingNo,setBuildingNo] =useState("")
+    const [flatNo,setFlatNo] =useState("")
+    const [floor,setFloor] =useState("")
 
+    const [additionalInfo,setAdditionalInfo] =useState("none")
 
+    const [address, setAddress] = useState({
+      link: '',
+      street: '',
+      city: '',
+      region: '',
+      buildingNo: '',
+      floor: '',
+      flatNo: '',
+    });
+    
+    const [isChecked, setIsChecked] = useState(false);
 
     const [cartProducts, setCartProducts] = useState([]);
     const [mapsLink, setMapsLink] = useState('');
@@ -44,28 +61,15 @@ import { Link } from 'react-router-dom';
       
   };
 
-  const deleteUserCart = async () => {
-    try {
-      const response = await fetch(`/products/deleteCart`, {
-        method: 'DELETE',
-      });
-
-      if (response.ok) {
-        console.log('User cart deleted successfully');
-      } else {
-        console.error('Failed to delete user cart');
-      }
-    } catch (error) {
-      console.error('Error deleting user cart:', error);
-    }
-  };
+  
 
   const getUserNumber = async () => {
     try {
-      const response = await fetch("/users/getUserNumber");
+      const response = await fetch("/products/userNum");
       if (response.ok) {
         const unumber = await response.json();
-        setPhone(unumber);
+        setPhone(unumber.phoneNumber);
+        setOPhone(unumber.phoneNumber);
         console.log(unumber);
       }
     } catch (error) {
@@ -76,17 +80,123 @@ import { Link } from 'react-router-dom';
 
   const getUserAddress = async () => {
     try {
-      const response = await fetch("/users/getUserAddress");
+      const response = await fetch("/products/userAdd");
       if (response.ok) {
         const uadd = await response.json();
-        setAddress(uadd);
-        console.log(uadd);
+        setCity(uadd.location.city)
+        setStreet(uadd.location.street)
+        setRegion(uadd.location.region)
+        setBuildingNo(uadd.location.buildingNo)
+        setFlatNo(uadd.location.flatNo)
+        setFloor(uadd.location.floor)
+        setAddress(
+          {
+            street: uadd.location.street,
+            city: uadd.location.city,
+            region: uadd.location.region,
+            buildingNo: uadd.location.buildingNo,
+            floor: uadd.location.floor,
+            flatNo: uadd.location.flatNo,
+          }
+        )
+
+
+        console.log(uadd.location);
       }
     } catch (error) {
       console.error("Error fetching user address:", error);
     }
       
   };
+
+  const editUserAddress = async (updatedAddress) => {
+    
+    try {
+      const response = await fetch("/users/editAddress", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedAddress),
+      });
+  
+      if (response.ok) {
+        const result = await response.json();
+        console.log(result);
+        return result;
+      } else {
+        throw new Error("Failed to update address");
+      }
+    } catch (error) {
+      console.error("Error updating address:", error);
+      throw error;
+    }
+  
+};
+
+  const editUserNumber = async (updatedNumber) => {
+    try {
+      const response = await fetch("/users/editPhoneNo", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedNumber),
+      });
+  
+      if (response.ok) {
+        const result = await response.json();
+        console.log(result);
+        return result;
+      } else {
+        throw new Error("Failed to update number");
+      }
+    } catch (error) {
+      console.error("Error updating number:", error);
+      throw error;
+    }
+  };
+  
+
+
+  const handleUpdateAddress = (event) => {
+    setIsChecked(event.target.checked);
+    if (!isChecked) {
+      const updatedAddress = {
+        newStreet: street,
+        newCity: city,
+        newRegion: region,
+        newBuildingNo: buildingNo,
+        newFloor: floor,
+        newFlatNo: flatNo,
+      };
+      const updatedNumber = {
+        newPhoneNo: phone
+      }
+    
+      editUserAddress(updatedAddress)
+        .then((result) => {
+          console.log('Address updated successfully!');
+        })
+        .catch((error) => {
+          // Handle errors here, e.g., show an error message
+          console.log('Failed to update address. Please try again.');
+        });
+
+        if(oPhone!=phone){
+
+          editUserNumber(updatedNumber)
+          .then((result) => {
+            console.log('Number updated successfully!');
+          })
+          .catch((error) => {
+            // Handle errors here, e.g., show an error message
+            console.log('Failed to update number. Please try again.');
+          });
+      }
+    }
+  };
+  
 
 
   const handleFnChange=(event)=>{
@@ -101,13 +211,64 @@ const handlePhoneChange=(event)=>{
   setPhone(event.target.value)
   }
 
-const handleAddressChange=(event)=>{
-  setAddress(event.target.value)
-}
+
 
 const handleInfoChange=(event)=>{
   setAdditionalInfo(event.target.value)
 }
+
+const handleCityChange = (event) => {
+  setAddress({
+    ...address,
+    city: event.target.value,
+  });
+  setCity( event.target.value);
+};
+
+const handleFlatChange = (event) => {
+  setAddress({
+    ...address,
+    flatNo: event.target.value,
+  });
+  setFlatNo( event.target.value);
+
+};
+
+const handleFloorChange = (event) => {
+  setAddress({
+    ...address,
+    floor: event.target.value,
+  });
+  setFloor( event.target.value);
+
+};
+
+const handleBNChange = (event) => {
+  setAddress({
+    ...address,
+    buildingNo: event.target.value,
+  });
+  setBuildingNo( event.target.value);
+
+};
+
+const handleRegionChange = (event) => {
+  setAddress({
+    ...address,
+    region: event.target.value,
+  });
+  setRegion( event.target.value);
+
+};
+
+const handleStreetChange = (event) => {
+  setAddress({
+    ...address,
+    street: event.target.value,
+  });
+  setStreet( event.target.value);
+
+};
 
 
   useEffect(() => {
@@ -129,6 +290,7 @@ const handleInfoChange=(event)=>{
             
             const link = `https://www.google.com/maps?q=${lat},${lng}`;
             setMapsLink(link);
+            setAddress({...address,link:mapsLink})
             console.log(mapsLink)
           },
           (error) => {
@@ -159,45 +321,73 @@ const handleInfoChange=(event)=>{
     }, [cartProducts]);
 
     const addOrder = async () => {
+      const orderDetails = cartProducts.map((product) => ({
+        productId: product.productID,
+        quantity: product.quantity,
+      }));
+    
       try {
+        // Step 1: Send a POST request to create the order
         const response = await fetch("/orders/createOrder", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            orderFirstName:firstName,
-            orderLastName:lastName,
-            orderPhone:phone,
-            orderProducts:products,
-            totalAmount:totalAmount,
-            address:address,
-            additionalInfo:additionalInfo
-        }),
+            orderFirstName: firstName,
+            orderLastName: lastName,
+            orderPhone: phone,
+            orderProducts: products,
+            totalAmount: totalAmount,
+            address: address,
+            additionalInfo: additionalInfo,
+          }),
         });
     
         if (response.ok) {
-          const newOrder = await response.json();
-          console.log(newOrder);
-
-          // Show a pop-up message to the user
-      window.alert("Your order has been created!");
-
-      // Call the deleteCart function to delete the user's cart
-      deleteUserCart();
-      window.location.href = "/"; // Navigate to the home page
-
-
-
-
-          return newOrder;
+          // Handle successful order placement, e.g., show a success message
+          alert("Your order has been placed successfully!");
+    
+          // Step 2: Call the deleteCart function to delete the user's cart
+          const deleteCartResponse = await fetch(`/products/deleteCart`, {
+            method: 'DELETE',
+    
+          });
+          if (deleteCartResponse.ok) {
+            // Clear the cart or perform other necessary actions
+            console.log('User cart deleted successfully');
+          } else {
+            // Handle errors, e.g., show an error message
+            console.error('Failed to delete user cart');
+          }
+    
+       
+          // Step 3: Send a POST request to deduct product quantities
+          const response2 = await fetch("/products/deduct", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(orderDetails),
+          });
+    
+          if (!response2.ok) {
+            // Handle errors, e.g., show an error message
+            alert("Failed to deduct product quantities. Please contact support.");
+          }
+    
+          // Step 4: Redirect to the home page
+          window.location.href = "/";
         } else {
-          throw new Error("Failed to add order");
+          // Handle errors, e.g., show an error message
+          alert("Failed to place your order. Please try again.");
         }
       } catch (error) {
-        throw error;
+        // Handle network errors or other issues
+        console.error("Error placing the order:", error);
       }
     };
+    
 
     const handleMapClick = (mapProps, map, clickEvent) => {
       const newLocation = {
@@ -357,13 +547,7 @@ const handleInfoChange=(event)=>{
                       <MDBInput  type='tel' className="mb-4" onChange={handlePhoneChange} value={phone}/>
                       </label>
                     </MDBRow>
-                    <MDBRow>
-                  
-                    <label> Address 
-                      <MDBInput  type='text' className="mb-4" onChange={handleAddressChange} value={address} />
-                      </label>
-                    
-                    </MDBRow>
+                 
                     <MDBRow>
                   
                   <label> Google Maps location 
@@ -371,12 +555,52 @@ const handleInfoChange=(event)=>{
                     </label>
                   
                   </MDBRow>
+                  <MDBRow className="mb-4">
+                    <MDBCol>
+                        <label> City
+                      <MDBInput  type='text'  value={city} onChange={handleCityChange}/>
+                      </label>
+                    </MDBCol>
+                    <MDBCol>
+                    <label> Region
+                      <MDBInput  type='text' value={region} onChange={handleRegionChange} />
+                      </label>
+                    </MDBCol>
+                    </MDBRow>
+
+<MDBRow className="mb-4">
+                    
+                    <label> Street
+                      <MDBInput  type='text' value={street} onChange={handleStreetChange}/>
+                      </label>
+                    </MDBRow>
+
                     <MDBRow>
+                    <MDBCol>
+                    <label> Building Number
+                      <MDBInput  type='text' value={buildingNo} onChange={handleBNChange}/>
+                      </label>
+                    </MDBCol>
+                    <MDBCol>
+                    <label> Floor
+                      <MDBInput  type='text' value={floor} onChange={handleFloorChange}/>
+                      </label>
+                    </MDBCol>
+                    <MDBCol>
+                    <label> Flat Number
+                      <MDBInput  type='text' value={flatNo} onChange={handleFlatChange}/>
+                      </label>
+                    </MDBCol>
+                  </MDBRow>
+
+                    <MDBRow style={{marginTop:"20px"}}>
                     <label> Additional information 
                   <MDBTextArea  rows={4} className="mb-4" onChange={handleInfoChange} value={additionalInfo}/>
                   </label>
                   </MDBRow>
-                
+                  <div className="d-flex justify-content-center">
+                    <MDBCheckbox name='flexCheck' value='' id='flexCheckChecked' label='Set as default address for next time?' defaultChecked={false}  onChange={handleUpdateAddress}/>
+                  </div>
                 </form>
               </MDBCardBody>
             </MDBCard>
@@ -385,9 +609,11 @@ const handleInfoChange=(event)=>{
               <MDBCardBody>
                 <p className="text-uppercase fw-bold mb-3 text-font" style={{color: "#006DA3", }}>Payment Method</p>
                 <MDBRow>
-                  
+                
                 </MDBRow>
+               
               </MDBCardBody>
+              
             </MDBCard>
             <div className="text-center">
               <MDBBtn onClick={addOrder} className="mb-4 w-100 gradient-custom-3  col-md-10 text-uppercase h4 text-font">Place order</MDBBtn>

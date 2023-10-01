@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { requireAuth } = require("./Middleware/authMiddleware");
+const { requireAuth,requireAuth2 } = require("./Middleware/authMiddleware");
 
 const cors = require("cors");
 const express = require("express");
@@ -12,13 +12,17 @@ const productsRoutes = require("./routes/products");
 const usersRoutes = require("./routes/users");
 const guestRoutes = require("./routes/guest");
 const workerRoutes = require("./routes/worker")
+const logRoutes = require("./routes/log")
 const ordersRoutes = require("./routes/orders")
 const promocodeRoutes = require("./routes/promocode")
+
 
 //functions for login routes
 const {
   login,
   signUp,
+  loginWorker,
+  signUpWorker,
   logOut,
   getCurrentUserId,
 } = require("./controllers/loginController");
@@ -45,6 +49,8 @@ app.use("/guest", guestRoutes);
 app.use("/promocode",promocodeRoutes)
 app.use("/orders",ordersRoutes)
 app.use("/worker",workerRoutes)
+app.use("/log",logRoutes)
+
 
 //connect to db and accessing same one everytime
 mongoose
@@ -77,6 +83,10 @@ app.get("/", function (req, res) {
 app.post("/login", login);
 
 app.post("/signup", signUp);
+
+app.post("/loginWorker", loginWorker);
+
+app.post("/signupWorker", signUpWorker);
 
 app.get("/logout", logOut);
 

@@ -1,0 +1,53 @@
+.tabsContainer {
+    font-family: Arial, sans-serif;
+    width: 100%; /* Use 100% viewport width */
+    border: 1px solid #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .tabsHeader {
+    display: flex;
+    border-bottom: 1px solid #d3d4d5;
+  }
+  
+  .tab, .activeTab {
+    padding: 15px 30px;
+    cursor: pointer;
+    flex: 1;
+    text-align: center;
+    background-color: #ffffff;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .tab:hover {
+    background-color: #d3d4d5;
+  }
+  
+  .activeTab {
+    background-color: #006da3;
+    color: white;
+  }
+  
+  .tabsContent {
+    padding: 20px;
+    background-color: white;
+  }
+
+  /* Add this CSS to your component's stylesheet */
+  .order-card-container {
+    display: grid;
+      grid-template-columns: repeat(2, 1fr); /* Two cards per row */
+      gap: 20px; /* Adjust the gap between cards as needed */
+      padding: 20px; 
+      }
+      
+      /* Style for each individual card (OrderCard component) */
+      .order-card {
+       height: 150px;
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       text-align: center;
+       padding: 20px;
+      }

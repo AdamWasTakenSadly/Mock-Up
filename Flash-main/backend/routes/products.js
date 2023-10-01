@@ -2,29 +2,55 @@ const express = require("express");
 const {
   getProducts,
   getProduct,
+  getProductAdmin,
   getProductName,
   getProductPrice,
   getProductRating,
   getProductDescription,
   getProductImage,
   addProduct,
+  editProduct,
+  editProductAmount,
   buyProduct,
   removeProduct,
   getCartProducts,
   searchProduct,
   deleteUserCart,
-  getUserEmail,
+
   checkProductStock,
+
+  filterProducts,
+  addRatingAndOrReview,
+  getCurrUserRatingAndOrReview,
+  getUserEmail,
+  getUserNumber,
+  getUserAddress,
+  deductStock
+
 } = require("../controllers/ProductsController");
 const router = express.Router();
-const { requireAuth } = require("../Middleware/authMiddleware");
+const { requireAuth,requireAuth2 } = require("../Middleware/authMiddleware");
 
 router.get("/getCartProducts", requireAuth, getCartProducts);
+
 
 router.get("/checkProductStock", requireAuth, checkProductStock);
 
 router.get("/getUserEmail", requireAuth, getUserEmail);
-router.post("/search", searchProduct);
+
+
+
+router.get("/userNum", requireAuth, getUserNumber);
+
+router.get("/userAdd", requireAuth, getUserAddress);
+
+
+
+router.post('/search', searchProduct);
+
+
+router.post('/deduct', deductStock);
+
 
 //for a logged in user and the same are created for a guest
 //GET all products
@@ -32,6 +58,8 @@ router.get("/", requireAuth, getProducts);
 
 //GET a single product
 router.get("/:id", requireAuth, getProduct);
+
+router.get("/A/:id", requireAuth2, getProductAdmin);
 
 //for testing purposes, so no need to protect them using requireAuth
 //GET a single product name
@@ -50,13 +78,28 @@ router.get("/:id/description", getProductDescription);
 router.get("/:id/image", getProductImage);
 
 //POST a new product
-router.post("/", addProduct);
+router.post("/", requireAuth2, addProduct);
+
+//Edit an existing product
+router.patch("/:id", requireAuth2, editProduct);
+
+router.patch("/amount/:id", requireAuth2, editProductAmount);
 
 //Buy product
 router.post("/buyProduct", requireAuth, buyProduct);
 
 router.post("/removeProduct", requireAuth, removeProduct);
 
-router.delete("/deleteCart", requireAuth, deleteUserCart);
+
+router.delete('/deleteCart',requireAuth,deleteUserCart)
+
+router.post('/filterProducts',filterProducts)
+
+router.patch('/:id/editOrAddRatingReview',requireAuth,addRatingAndOrReview)
+
+router.get('/:id/getCurrUserRatingReview',requireAuth,getCurrUserRatingAndOrReview)
+
+
+
 
 module.exports = router;
