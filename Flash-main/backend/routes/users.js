@@ -3,7 +3,7 @@ const express =require('express')
 const {getUsers, 
     getUser, 
     getUserUsername, 
-    getUserEmail, 
+    //getUserEmail, 
     getUserCart,
     getUserNumber,
     getUserAddress,
@@ -29,14 +29,14 @@ router.get('/getUser',requireAuth,getUser)
 router.get('/getUsername',requireAuth,getUserUsername)
 
 //GET a single user email
-router.get("/getEmail",requireAuth,getUserEmail)
+//router.get("/getEmail",requireAuth,getUserEmail)
 
 
 //GET a single user cart
 router.get("/:id/cart", getUserCart);
 
 
-router.get('/number',requireAuth,getUserNumber)
+router.get('/number',requireAuth,getUserNumber);
 
 
 router.get("/address", getUserAddress);
