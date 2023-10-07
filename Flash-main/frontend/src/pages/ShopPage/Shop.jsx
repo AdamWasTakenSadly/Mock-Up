@@ -7,6 +7,7 @@ import { MDBBtn } from "mdb-react-ui-kit"; // Import the MDBBtn component
 import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import { Carousel } from "react-bootstrap";
+import FilterProducts from "../../components/FilterProducts/FilterProducts";
 
 const Shop = () => {
   const params = new URLSearchParams(window.location.search);
@@ -61,6 +62,10 @@ const Shop = () => {
     console.log(...userSearchInput)
   }
 
+  const handleFilterProducts=(filteredProducts)=>{
+    setProducts(filteredProducts)
+  }
+
 
   return (
     <div className="allproducts">
@@ -82,7 +87,12 @@ const Shop = () => {
             />
           </Carousel.Item>
         </Carousel>
-      <h2>All products</h2>
+        <div className="shop-page-container">
+      <div className="shop-page-filter">
+            <FilterProducts onProductsFiltered={handleFilterProducts}></FilterProducts>
+            </div>
+            <div className="shop-page-products">
+      {/*<h2>All products</h2>*/}
         <div>
         <Form className="d-flex">
             <input
@@ -124,6 +134,8 @@ const Shop = () => {
             <button class ="btn-mdb" onClick={loadMoreProducts}>Load More</button>
           </div>
         )}
+        </div>
+        </div>
       </div>
     </div>
   );

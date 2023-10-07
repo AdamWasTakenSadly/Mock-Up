@@ -77,4 +77,12 @@ h2{
   left: 0;
   min-height: 500px;
 }
-
+.shop-page-container{
+  display: flex;
+}
+.shop-page-filter{
+  flex: 0 0 auto;
+}
+.shop-page-products{
+  flex: 1;
+}

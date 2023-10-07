@@ -4,8 +4,10 @@ const router = express.Router();
 const {createOrder, getOrdersPending,
     getOrdersDelivering,
     getOrdersShipped,
+
     getOrdersCanceled,getUserOrders,
     updateStatus,sendOrderDetails} = require('../controllers/OrderController');
+
 const { requireAuth, requireAuth2 } = require("../Middleware/authMiddleware");
 
 
