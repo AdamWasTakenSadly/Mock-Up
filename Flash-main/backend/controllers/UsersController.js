@@ -89,12 +89,12 @@ const editUserUsername = async(req,res)=>{
     const usernameAlreadyExists=await User.find({username:newUsername})
     if(usernameAlreadyExists.length!==0)
     {
-      res.status(409).json("Username already exists!")
+      res.status(409).json({ error: "Username already exists!" })
     }
     else
     {
       const result= await User.updateOne({"_id":userID},{$set: { "username" : newUsername}})
-      res.status(200).json("Username updated succesfully!");
+      res.status(200).json({message:"Username updated succesfully!"});
     }
   }
   catch(error)
@@ -113,12 +113,12 @@ const editUserEmail = async(req,res)=>{
     const emailAlreadyExists=await User.find({email:newEmail})
     if(emailAlreadyExists.length!==0)
     {
-      res.status(409).json("Email already exists!")
+      res.status(409).json({error:"Email already exists!"})
     }
     else
     {
       const result= await User.updateOne({"_id":userID},{$set: { "email" : newEmail}})
-      res.status(200).json("Email updated successfully!");
+      res.status(200).json({message:"Email updated successfully!"});
     }
   }
   catch(error)
@@ -142,11 +142,11 @@ const editUserPassword = async(req,res)=>{
         if(passwordVerified)
         {
            const result=await User.updateOne({"_id":userID},{"password":hashedNewPassword})
-            res.status(200).json("Password changed successfully")
+            res.status(200).json({message:"Password changed successfully"})
         }
         else
         {
-          res.status(401).json("Incorrect old password")
+          res.status(401).json({error:"Incorrect old password"})
         }
   }
   catch(error)
@@ -165,12 +165,12 @@ const editUserPhoneNo = async(req,res)=>{
     const phoneNoAlreadyExists=await User.find({phoneNumber:newPhoneNo})
     if(phoneNoAlreadyExists.length!==0)
     {
-      res.status(409).json("Phone number already exists!")
+      res.status(409).json({error:"Phone number already exists!"})
     }
     else
     {
       const result= await User.updateOne({"_id":userID},{$set: { "phoneNumber" : newPhoneNo}})
-      res.status(200).json("Phone Number updated successfully!");
+      res.status(200).json({message:"Phone Number updated successfully!"});
     }
   }
   catch(error)
@@ -217,7 +217,7 @@ const editUserAddress = async(req,res)=>{
     }
 
     const result= await User.updateOne({"_id":userID},{$set: { "location" : newAddress}})
-    res.status(200).json("Location updated successfully!");
+    res.status(200).json({message:"Location updated successfully!"});
   }
   catch(error)
   {

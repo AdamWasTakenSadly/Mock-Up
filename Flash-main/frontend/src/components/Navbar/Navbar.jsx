@@ -11,7 +11,7 @@ import Popup from "../../components/Popup/Popup";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
 import {Confirm} from 'react-admin';
-
+import PersonIcon from '@mui/icons-material/Person';
 
 const handleLogOut = () => {
   const response = fetch("/login/logout");
@@ -288,6 +288,26 @@ function Navbar1() {
             >
               Shop Now
             </Nav.Link>
+
+            <Nav.Link
+                href=""
+                style={{
+                  backgroundImage:
+                    "linear-gradient(to bottom, #0099D3, #006DA3)",
+                  width: "60px",
+                  height: "50px",
+                  borderRadius: "40px",
+                  marginLeft: "25px",
+                  marginTop: "20px",
+                }}
+              >
+                <PersonIcon style={{color:"white",marginLeft:"2px"}}></PersonIcon>
+              
+              </Nav.Link>
+              <NavDropdown  style={{marginTop: "20px"}} id="basic-nav-dropdown" >
+              <NavDropdown.Item href="/myProfile">My Profile</NavDropdown.Item>
+              <NavDropdown.Item href="/myOrders">My Orders</NavDropdown.Item>
+              </NavDropdown>
 
          
             {/* If the user is a guest, show the login icon */}

@@ -4,7 +4,8 @@ const {createOrder, getOrdersPending,
     getOrdersDelivering,
     getOrdersShipped,
     getOrdersCanceled,
-    updateStatus} = require('../controllers/OrderController');
+    updateStatus,
+    getUserOrders} = require('../controllers/OrderController');
 const { requireAuth, requireAuth2 } = require("../Middleware/authMiddleware");
 
 

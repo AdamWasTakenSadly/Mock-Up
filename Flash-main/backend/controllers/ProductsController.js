@@ -578,7 +578,7 @@ const getCurrUserRatingAndOrReview=async(req,res)=>{
     }
     else
     {
-      return res.status(404).json("current user didn't rate or review before")
+      return res.status(201).json({error:"current user didn't rate or review before"})
     }
 
   }catch(error)
@@ -652,6 +652,16 @@ const deductStock = async (req, res) => {
   }
 };
 
+const getAllCategories=async(req,res)=>{
+
+  try {
+    const result=await Product.aggregate([ { $group: { _id: "$category" } },{ $project : { _id: 0, category:"$_id"}}])
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
 
 module.exports = {
   getProducts,
@@ -676,6 +686,6 @@ module.exports = {
   getUserEmail,
   getUserNumber,
   getUserAddress,
-  deductStock
-
+  deductStock,
+  getAllCategories
 };

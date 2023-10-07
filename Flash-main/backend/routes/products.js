@@ -22,7 +22,8 @@ const {
   getUserEmail,
   getUserNumber,
   getUserAddress,
-  deductStock
+  deductStock,
+  getAllCategories
 } = require("../controllers/ProductsController");
 const router = express.Router();
 const { requireAuth,requireAuth2 } = require("../Middleware/authMiddleware");
@@ -39,6 +40,8 @@ router.get("/userAdd", requireAuth, getUserAddress);
 
 
 router.post('/search', searchProduct);
+
+router.get('/getAllCategories', getAllCategories);
 
 router.post('/deduct', deductStock);
 

@@ -27,9 +27,9 @@ const ProductDetails = ({ product }) => {
   const [isModalOpen2, setIsModalOpen2] = useState(false); // State for modal open/close
   const params = useParams();
   const id = params.id;
- 
 
-  
+  const [currUserRating,setCurrentUserRating]=useState(0)
+  const [success,setSuccess]=useState(null)
 
   const addCart = async (product) => {
     try {
@@ -66,8 +66,8 @@ const ProductDetails = ({ product }) => {
 
   useEffect(() => {
     if (isInitialRender) {
+      getCurrUserRating();
       setIsInitialRender(false);
-      
     }
   }, []);
   const closeModal = () => {
@@ -82,6 +82,46 @@ const ProductDetails = ({ product }) => {
   const openModal2 = () => {
     setIsModalOpen2(true);
   };
+
+  const getCurrUserRating=async()=>{
+    const response = await fetch ('/products/'+product._id+'/getCurrUserRatingReview')
+    const json = await response.json()
+    if (response.status===200)
+    {
+        console.log("response: ",json.rating)
+        setCurrentUserRating(json.rating)
+     }
+  }
+
+  const changeOrEditRating=async(e)=>{
+    setCurrentUserRating(e.target.value)
+    const input = { rating: e.target.value};
+
+    try {
+      const response = await fetch("/products/"+product._id+"/editOrAddRatingReview", {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json', // Adjust the content type as needed
+        },
+        body: JSON.stringify(input),
+      });
+
+      const json = await response.json();
+      if (response.ok) {
+       setSuccess("Rating added successfully")
+      } else {
+       setError(json.error)
+       setSuccess(null)
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  if(isInitialRender)
+  {
+    return (<div>Loading...</div>)
+  }
 
   return (
 
@@ -167,12 +207,20 @@ const ProductDetails = ({ product }) => {
       </Modal.Body>
       <Modal.Footer>
         {/* Add to cart button in modal */}
+        <div className="modal-footer-container">
+        <div className="modal-footer-container-left">
+        <Rating value={currUserRating} onChange={changeOrEditRating}></Rating>
+        {success && <p>{success}</p>}
+        </div>
+        <div className="modal-footer-container-right">
         <Button className="addtocart" onClick={() => addCart(product)}>
           ADD TO CART
         </Button>
         <Button variant="secondary" onClick={closeModal}>
           Close
         </Button>
+        </div>
+        </div>
       </Modal.Footer>
     </Modal>
 

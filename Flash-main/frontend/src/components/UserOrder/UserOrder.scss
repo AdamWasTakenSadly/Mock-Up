@@ -1,0 +1,13 @@
+.order-container{
+    display: flex;
+}
+.order-image{
+    width: 151px;
+}
+.order-text-container{
+    display: flex;
+    flex-direction: column
+}
+.order-text{
+    flex: 1 0 auto;
+}

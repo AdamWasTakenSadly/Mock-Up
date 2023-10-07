@@ -28,6 +28,9 @@ import Cookie from 'js-cookie'
 import Shop from './pages/ShopPage/Shop'
 import CheckoutPage from './pages/Checkout/Checkout'
 
+import CustomerProfile from './pages/CustomerProfile/CustomerProfile'
+import AllMyOrders from './pages/AllMyOrders/AllMyOrders'
+
 
 function App() {
 
@@ -46,8 +49,6 @@ function App() {
             <Route path ='/shop' element ={<Shop/>}/> 
             <Route path="*" element={<AccessDenied />} />
            
-           
-
 
             {isLoggedIn==undefined?
             (
@@ -87,6 +88,16 @@ function App() {
             </Route>
 
             )
+          }
+
+         {
+          isLoggedIn!==undefined?
+          (<Route>
+              <Route path="/myProfile" element={<CustomerProfile />} />
+              <Route path="/myOrders" element={<AllMyOrders />} />
+            </Route>)
+            :
+            (<Route path="/" element={<Home />} />)
           }
             
            
