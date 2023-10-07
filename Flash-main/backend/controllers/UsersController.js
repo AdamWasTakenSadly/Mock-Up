@@ -1,3 +1,5 @@
+const { findById } = require("../models/ProductsModel");
+const { findOne } = require("../models/PromocodeModel");
 const User = require("../models/UsersModel");
 
 const bcrypt = require('bcrypt')
@@ -35,17 +37,51 @@ const getUserUsername = async (req, res) => {
 };
 
 //GET a single user email
-const getUserEmail = async (req, res) => {
+/*const getUserEmail = async (req, res) => {
   try {
-    console.log(req.user.id);
 
-    const userId = req.user.id;
-    const email = await User.findById(userId).select("email");
+    const id = req.user.id;
+    const user = await User.findOne({ _id: id });
+    const email = user.select(email);
+
+    console.log("hi");
+
+
     res.status(200).json(email);
   } catch (error) {
     res.status(400).json({ error: error.message });
+    console.log("hellooo");
   }
-};
+};*/
+
+// Define a function to get the user's email by user ID
+/*const getUserEmail = async (req, res) => {
+  try {
+    // Get the user ID from req.user.id provided by Passport.js
+    const userId = req.user.id;
+
+    // Find the user by their user ID in the database
+    const user = await User.findById(userId);
+    console.log(user);
+
+    // Check if the user exists
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Extract and return the user's email
+    const userEmail = user.email;
+    console.log(userEmail);
+    // Send the email as JSON response
+    res.status(200).json({ userEmail });
+  } catch (error) {
+    console.error("Error fetching user email:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};*/
+
+// Example route usage:
+// Attach this function to an authenticated route, e.g., app.get('/user/email', getUserEmail);
 
 //GET a single user email
 const getUserCart = async (req, res) => {
@@ -78,6 +114,7 @@ const getUserAddress = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 const editUserUsername = async(req,res)=>{
 
@@ -226,17 +263,20 @@ const editUserAddress = async(req,res)=>{
 }
 
 
+
 module.exports = {
   getUsers,
   getUser,
   getUserUsername,
-  getUserEmail,
+  //getUserEmail,
   getUserCart,
   getUserNumber,
   getUserAddress,
+
   editUserUsername,
   editUserEmail,
   editUserPassword,
   editUserPhoneNo,
   editUserAddress
+
 };

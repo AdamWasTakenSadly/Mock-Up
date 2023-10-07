@@ -1,3 +1,4 @@
+
 const express =require('express')
 const {getUsers, 
     getUser, 
@@ -15,11 +16,13 @@ const {getUsers,
 const router=express.Router()
 const { requireAuth } = require('../Middleware/authMiddleware');
 
+
 //for testing purposes, so no need to protect them using requireAuth
 //GET all users
-router.get('/',getUsers)
+router.get("/", getUsers);
 
 //GET a single user
+
 router.get('/getUser',requireAuth,getUser)
 
 //GET a single user username
@@ -28,10 +31,15 @@ router.get('/getUsername',requireAuth,getUserUsername)
 //GET a single user email
 router.get("/getEmail",requireAuth,getUserEmail)
 
+
 //GET a single user cart
-router.get('/:id/cart',getUserCart)
+router.get("/:id/cart", getUserCart);
+
 
 router.get('/number',requireAuth,getUserNumber)
+
+
+router.get("/address", getUserAddress);
 
 
 router.get('/address',getUserAddress)
@@ -48,3 +56,4 @@ router.patch('/editAddress',requireAuth,editUserAddress)
 
 
 module.exports = router
+
